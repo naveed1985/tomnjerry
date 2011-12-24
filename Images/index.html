@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="jquery-1.7.js"></script>
+        <script src="Engine.js"></script>
+		<script src="jqueryAlerts.js"></script>
+		<link rel="stylesheet" type="text/css" href="jqueryAlerts.css" />
+        <title>Tom & Jerry</title>
+                <style>
+            .container{
+                width:700px;
+                margin:auto;
+            }
+            #content{
+                border: 1px solid;
+                width:700px;
+            }
+        </style>
+    </head>
+    <body onload="init()">
+        <div class="container">
+            <div style="width:700px;">
+            <div id="ResultsFelix" style="float:left;">Felix
+                <label id="LivesFelix" >Lives : 3</label>
+                <label id="ScoreFelix" >Score : 0</label>
+            </div>
+            <div id="ResultsTom" style="float:right;">Tom
+                <label id="LivesTom" >Lives : 3</label>
+                <label id="ScoreTom" >Score : 0</label>
+            </div>
+			<div style="clear:both"></div>
+            </div>
+            
+            <div id="content">
+                <canvas id="canvas" width="700" height="560" ></canvas>
+            </div>
+        </div>
+    </body>
+</html>
