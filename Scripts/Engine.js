@@ -34,6 +34,16 @@ var TomImg = new Image();
 TomImg.src = 'Images/Tom.jpg';
 var FelixImg = new Image();
 FelixImg.src = 'Images/Felix2.jpg';
+var BombImg = new Image();
+BombImg.src = 'Images/Bomb.jpg';
+var UexpImg = new Image();
+UexpImg.src = 'Images/explosionUp.jpg';
+var DexpImg = new Image();
+DexpImg.src = 'Images/explosionDown.jpg';
+var RexpImg = new Image();
+RexpImg.src = 'Images/explosionRight.jpg';
+var LexpImg = new Image();
+LexpImg.src = 'Images/explosionLeft.jpg';
 
 var FelixX = 0;
 var FelixY = 0;
@@ -41,22 +51,50 @@ var TomX = NCOLS - 1;
 var TomY = NROWS - 1;
 var MouseX;
 var MouseY;
+var oldMouse = 0;
+
+var TomBombX;
+var TomBombY;
+var FelixBombX;
+var FelixBombY;
 
 //Movement flags
 var TOM_UP_PRESSED=false;
 var TOM_DOWN_PRESSED=false;
 var TOM_LEFT_PRESSED=false;
 var TOM_RIGHT_PRESSED=false;
+
 var FELIX_UP_PRESSED=false;
 var FELIX_DOWN_PRESSED=false;
 var FELIX_LEFT_PRESSED=false;
 var FELIX_RIGHT_PRESSED=false;
 
+// Bomb's flags snd variables
+var Tom_bomb_activate = false;   // if true, then Tom has used activated bomb	
+var Felix_bomb_activate = false; // if true, then Felix has used activated bomb
+var Tom_bomb_explode = false;    // To keep 'explosion' images under check (for Tom)
+var Felix_bomb_explode = false;  // To keep 'explosion' images under check (for Felix)
+var TomBdir = 37;                // Store Tom's last movement
+var FelixBdir = 68;              // Store Felix's last movement
+
+var TbombMove;
+var FbombMove;
+
+var TmoveCount = 0;
+var FmoveCount = 0;  
+
+var TomBcount = 10;               // Tom's bombs
+var FelixBcount = 10;               // Felix's bombs
+
+var TomBcheck = 0;            
+var FelixBcheck = 0;
 //variables to hold intervalIds, would be used for clearing interval on Game Over
 var drawIntervalId=0;
 var mouseIntervalId=0;
 var moveIntervalId=0;
-
+var TomBIntervalId = 0;
+var FelixBIntervalId = 0;
+// initializing system
 function init() {
     ctx = $('#canvas')[0].getContext("2d");
     Draw();
@@ -65,41 +103,150 @@ function init() {
     moveIntervalId=setInterval(makeMove,CAT_SPEED);  //check if cats should move.
 }
 
+// controlling Tom's movement
 function SetTomCoordinates(locx, locy) {
     if (board[locy][locx] == 'E') {
-        TomX = locx;
-        TomY = locy;
+		// Dont let move over other cat
+		if (locy != FelixY || locx != FelixX) {
+			TomX = locx;
+			TomY = locy;
+		}
     }
 }
 
 function SetFelixCoordinates(locx, locy) {
     if (board[locy][locx] == 'E') {
-        FelixX = locx;
-        FelixY = locy;
+		// Dont let move over other cat
+		if (locx != TomX || locy != TomY) {
+			FelixX = locx;
+			FelixY = locy;
+		}
     }
 }
 
+// Setting check on cats' movements
 function setMovementflag(evtCode,value){
-    if(evtCode == 37 ) { // Left
+    if(evtCode == 37 ) { // Tom Left
         TOM_LEFT_PRESSED=value;
-    } else if(evtCode == 38) { // Up
+		TomBdir = evtCode;
+    } else if(evtCode == 38) { //Tom Up
         TOM_UP_PRESSED=value;
-    } else if(evtCode == 39) { // Right
+		TomBdir = evtCode;
+    } else if(evtCode == 39) { //Tom Right
         TOM_RIGHT_PRESSED=value;
-    } else if(evtCode == 40) { // Down
+		TomBdir = evtCode;
+    } else if(evtCode == 40) { //Tom Down
         TOM_DOWN_PRESSED=value;
-    } else if(evtCode == 65 ) { // Left
+		TomBdir = evtCode;
+    } else if(evtCode == 65 ) { //Felix Left
         FELIX_LEFT_PRESSED=value;
-    } else if(evtCode == 87 ) { // Up
+		FelixBdir = evtCode;
+    } else if(evtCode == 87 ) { //Felix Up
         FELIX_UP_PRESSED=value;
-    } else if(evtCode == 68 ) { // Right
+		FelixBdir = evtCode;
+    } else if(evtCode == 68 ) { //Felix Right
         FELIX_RIGHT_PRESSED=value;
-    } else if(evtCode == 83 ) { // Down
+		FelixBdir = evtCode;
+    } else if(evtCode == 83 ) { //Felix Down
         FELIX_DOWN_PRESSED=value;
+		FelixBdir = evtCode;
     }
+	if(evtCode == 66) {
+	if(TomBcheck == 0){ //to avoid multiple selection of Bomb on single press 
+	TomBcheck = 1;
+	if(TomBcount > 0)
+{Tom_bomb_activate = true;
+TomBcount -= 1; DecreaseBombTom();
+TomBombX = TomX; TomBombY = TomY; TbombMove = TomBdir;
+TmoveCount = 0;
+TomBIntervalId = setInterval(ThrowTomBomb, 40);
+} else Tom_bomb_activate = false;
+	//ThrowTomBomb();
+	}
+	}if(evtCode == 90) {
+	if(FelixBcheck == 0) {
+	FelixBcheck = 1;
+if(FelixBcount > 0)
+{ Felix_bomb_activate = true;
+FelixBcount -= 1; DecreaseBombFelix();
+FelixBombX = FelixX; FelixBombY = FelixY; FbombMove = FelixBdir;
+FmoveCount = 0;
+FelixBIntervalId = setInterval(ThrowFelixBomb, 40);
+} else Felix_bomb_activate = false;
+	}
+}
+}
+
+function ThrowTomBomb() {
+if(TmoveCount < 4 ) {
+ var x, y;
+x = TomBombX; y = TomBombY;
+ TmoveCount = TmoveCount + 1;
+ 
+ switch(TbombMove){ 
+ 
+ case 37:   // Tom Left
+        if(x-1 < 0) TomBombX = 0;
+		else TomBombX = x - 1; 
+		TomBombY = y; 
+		break;
+
+ case 38:   //Tom Up
+		if(y-1 < 0) TomBombY = 0;
+		else TomBombY = y - 1; 
+		TomBombX = x; 
+		break;
+
+ case 39:   //Tom Right
+		if(x+1 > NCOLS ) TomBombX = NCOLS - 1;
+		else TomBombX = x + 1; 
+		TomBombY = y; 
+		break;
+
+ case 40:    //Tom Down
+		if (y+1 > NROWS) TomBombY = NROWS - 1;
+		else TomBombY = y + 1; 
+		TomBombX = x; 
+		break;
+default: break;
+} 
+}else { clearInterval(TomBIntervalId); 
+var t = setTimeout('TomBombExp()',5000);}
 }
 
 
+function ThrowFelixBomb() {
+if(FmoveCount < 4) {
+var x, y;
+x = FelixBombX; y = FelixBombY;
+ FmoveCount = FmoveCount + 1;
+
+ switch(FbombMove){ 
+ 
+ case 65:  //Felix Left
+		if(x-1 < 0) FelixBombX = 0;
+		else FelixBombX = x - 1; 
+		FelixBombY = y; 
+		break;
+case 87:   //Felix Up
+		if(y-1 < 0) FelixBombY = 0;
+		else FelixBombY = y - 1; 
+		FelixBombX = x;
+		break;
+ case 68:    //Felix Right
+		if(x+1 > NCOLS ) FelixBombX = NCOLS - 1;
+		else FelixBombX = x + 1; 
+		FelixBombY = y; 
+		break;
+  case 83:   //Felix Down
+		if (y+1 > NROWS) FelixBombY = NROWS - 1;
+		else FelixBombY = y + 1; 
+		FelixBombX = x; 
+		break;
+ default: break;
+} } else { clearInterval(FelixBIntervalId); 
+var t = setTimeout('FelixBombExp()',5000);}
+}
 //Key Borad Keys Event
 function onKeyDown(evt) {
     setMovementflag(evt.keyCode,true);
@@ -129,7 +276,7 @@ function makeMove() {
                             }
                         } else if(TOM_RIGHT_PRESSED){
                             x = x + 1;
-                            console.log("x = "+x);
+                          //  console.log("x = "+x);
                             if (x < NCOLS) {
                                     SetTomCoordinates(x, y);
                             }
@@ -161,7 +308,7 @@ function makeMove() {
 			}
 			
 		} 
-                //dont do elsif here, both could move simultaneously, which is not possible in case of elseif.
+                //dont do 'elsif' here, both could move simultaneously, which is not possible in case of elseif.
                 if(  FELIX_LEFT_PRESSED || FELIX_UP_PRESSED || FELIX_RIGHT_PRESSED || FELIX_DOWN_PRESSED) {
 			// Its Felix
 			x = FelixX; y = FelixY;
@@ -230,27 +377,37 @@ function makeMove() {
 	}
 }
 
+// display  mouse
 function DisplayMouse() {
-    var randomnumber = Math.floor(Math.random() * 6);
-    
-    var counter = 0;
-    for (i=0; i < NROWS; i++) {
-        for (j=0; j < NCOLS; j++) {
-            if(board[i][j] == 'H') {
-                if(counter == randomnumber) {
-                    MouseX = j;
-                    MouseY = i;
-                    return null;
-                }
-                else
-                    counter++;
-            }
-        }
-    }
+    var randomnumber = -1;
+
+	do {
+		randomnumber = Math.floor(Math.random() * 6);
+	} while (randomnumber == oldMouse);
+	
+	oldMouse = randomnumber;
+	
+	var counter = 0;
+	for (i=0; i < NROWS; i++) {
+		for (j=0; j < NCOLS; j++) {
+			if(board[i][j] == 'H') {
+				if(counter == randomnumber) {
+					MouseX = j;
+					MouseY = i;
+					return null;
+				}
+				else
+					counter++;
+			}
+		}
+	}
 }
+
+// throw bomb
 
 function Draw()
 {
+//FragileBricks();
     brickCounter = 0;
     var img;
 
@@ -274,11 +431,36 @@ function Draw()
             }
             if(MouseX == j && MouseY == i) {
                     img = MouseImg;
-            }
-
-//            rect((j * (BRICKWIDTH + PADDING)) + PADDING, 
-//                    (i * (BRICKHEIGHT + PADDING)) + PADDING,
-//                        BRICKWIDTH, BRICKHEIGHT);
+            } // Tom Bomb
+			if(Tom_bomb_activate && TomBombY == i && TomBombX == j) { //creating image of bomb
+			img = BombImg;
+			} if(Tom_bomb_explode){ //creating image for bomb explosion
+			if(TomBombY-1 == i && TomBombX == j){
+			img = UexpImg;
+			} if(TomBombY+1 == i && TomBombX == j){
+			img = DexpImg;
+			}if(TomBombY == i && TomBombX-1 == j){
+			img = LexpImg;
+			}if(TomBombY == i && TomBombX+1 == j){
+			img = RexpImg;
+			}
+			TomBcheck = 0;
+			}
+			// Felix bomb 
+			if(Felix_bomb_activate && FelixBombY == i && FelixBombX == j) {
+			img = BombImg;
+			} if(Felix_bomb_explode){
+			if(FelixBombY-1 == i && FelixBombX == j){
+			img = UexpImg;
+			} if(FelixBombY+1 == i && FelixBombX == j){
+			img = DexpImg;
+			}if(FelixBombY == i && FelixBombX-1 == j){
+			img = LexpImg;
+			}if(FelixBombY == i && FelixBombX+1 == j){
+			img = RexpImg;
+			}
+			FelixBcheck = 0;
+			}
 
             ctx.drawImage(img,
                 (j * (BRICKWIDTH + PADDING)) + PADDING,
@@ -286,6 +468,41 @@ function Draw()
                 BRICKWIDTH, BRICKHEIGHT);
         }
     }
+}
+
+function RemoveFragile(x,y)
+{ var i, j;
+i = x; j = y;
+if(board[i][j] == 'F') board[i][j] = 'E';
+if(board[i-1][j] == 'F') board[i-1][j] = 'E';
+if(board[i+1][j] == 'F') board[i+1][j] = 'E';
+if(board[i][j-1] == 'F') board[i+1][j-1] = 'E';
+if(board[i][j+1] == 'F') board[i+1][j+1] = 'E';
+else return null;
+}
+
+// Functions to keep animations of 'Bomb' and 'explosion' under control
+function TomBombExp()
+{ // Activate explosion images
+Tom_bomb_activate = false;
+Tom_bomb_explode = true;
+var t = setTimeout('ClearTomB()',1000);
+}
+function ClearTomB()
+{ // clear explosion images
+Tom_bomb_explode = false;
+}
+
+function FelixBombExp()
+{ // Activate explosion images
+Felix_bomb_activate = false;
+Felix_bomb_explode = true;
+var t = setTimeout('ClearFelixB()',1000);
+
+}
+function ClearFelixB()
+{// clear explosion images
+Felix_bomb_explode = false;
 }
 
 function IO(U, V) {//LA MOD String Version. A tiny ajax library.  by, DanDavis
@@ -310,4 +527,11 @@ function IncreaseScoreTom() {
 
 function IncreaseScoreFelix() {
     $('#ScoreFelix').text("Score : " + ++scoreFelix);
+}
+
+function DecreaseBombTom() {
+    $('#BombTom').text("Bombs : " + TomBcount);
+}
+function DecreaseBombFelix() {
+    $('#BombFelix').text("Bombs : " + FelixBcount);
 }
