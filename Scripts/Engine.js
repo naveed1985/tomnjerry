@@ -19,6 +19,8 @@ var PADDING = 0;
 var bricksCount = NROWS * NCOLS;
 
 var board = IO("Map.txt").split(/\r?\n/g);
+for(line in board)
+board[line]=board[line].split("");
 
 var SolidImg = new Image();
 SolidImg.src = 'Images/S.png';
@@ -88,6 +90,8 @@ var FelixBcount = 10;               // Felix's bombs
 
 var TomBcheck = 0;            
 var FelixBcheck = 0;
+
+var checklife = false;
 //variables to hold intervalIds, would be used for clearing interval on Game Over
 var drawIntervalId=0;
 var mouseIntervalId=0;
@@ -157,8 +161,9 @@ function setMovementflag(evtCode,value){
 	if(TomBcount > 0)
 {Tom_bomb_activate = true;
 TomBcount -= 1; DecreaseBombTom();
-TomBombX = TomX; TomBombY = TomY; TbombMove = TomBdir;
+TomBombX = TomX; TomBombY = TomY;  TbombMove = TomBdir;
 TmoveCount = 0;
+//ThrowTomBomb();
 TomBIntervalId = setInterval(ThrowTomBomb, 40);
 } else Tom_bomb_activate = false;
 	//ThrowTomBomb();
@@ -301,9 +306,7 @@ function makeMove() {
 					IncreaseScoreTom();
 				}
 				else {
-					TomX = NCOLS - 1;
-					TomY = NROWS - 1;
-					DecreaseLifeTom();
+					InitializeTom();
 				}
 			}
 			
@@ -346,9 +349,7 @@ function makeMove() {
 					IncreaseScoreFelix();
 				}
 				else {
-					FelixX = 0;
-					FelixY = 0;
-					DecreaseLifeFelix();
+					InitializeFelix();
 				}
 			}
 		}
@@ -410,7 +411,6 @@ function Draw()
 //FragileBricks();
     brickCounter = 0;
     var img;
-
     for (i=0; i < NROWS; i++) {
         for (j=0; j < NCOLS; j++) {
             
@@ -435,6 +435,8 @@ function Draw()
 			if(Tom_bomb_activate && TomBombY == i && TomBombX == j) { //creating image of bomb
 			img = BombImg;
 			} if(Tom_bomb_explode){ //creating image for bomb explosion
+			if (checklife){ Checklife(TomBombY,TomBombX); checklife = false;}
+			RemoveFragile(TomBombY,TomBombX);
 			if(TomBombY-1 == i && TomBombX == j){
 			img = UexpImg;
 			} if(TomBombY+1 == i && TomBombX == j){
@@ -450,7 +452,10 @@ function Draw()
 			if(Felix_bomb_activate && FelixBombY == i && FelixBombX == j) {
 			img = BombImg;
 			} if(Felix_bomb_explode){
+			if(checklife){ Checklife(FelixBombY,FelixBombX); checklfe = false; }
+			RemoveFragile(FelixBombY,FelixBombX);
 			if(FelixBombY-1 == i && FelixBombX == j){
+			
 			img = UexpImg;
 			} if(FelixBombY+1 == i && FelixBombX == j){
 			img = DexpImg;
@@ -474,10 +479,10 @@ function RemoveFragile(x,y)
 { var i, j;
 i = x; j = y;
 if(board[i][j] == 'F') board[i][j] = 'E';
-if(board[i-1][j] == 'F') board[i-1][j] = 'E';
-if(board[i+1][j] == 'F') board[i+1][j] = 'E';
-if(board[i][j-1] == 'F') board[i+1][j-1] = 'E';
-if(board[i][j+1] == 'F') board[i+1][j+1] = 'E';
+if(i-1 > -1){if(board[i-1][j] == 'F') board[i-1][j] = 'E';}
+if(i+1 > NROWS){if(board[i+1][j] == 'F') board[i+1][j] = 'E';}
+if(j-1 > -1){if(board[i][j-1] == 'F') board[i+1][j-1] = 'E';}
+if(j+1 > NCOLS){if(board[i][j+1] == 'F') board[i+1][j+1] = 'E';}
 else return null;
 }
 
@@ -486,6 +491,7 @@ function TomBombExp()
 { // Activate explosion images
 Tom_bomb_activate = false;
 Tom_bomb_explode = true;
+checklife = true;
 var t = setTimeout('ClearTomB()',1000);
 }
 function ClearTomB()
@@ -497,12 +503,52 @@ function FelixBombExp()
 { // Activate explosion images
 Felix_bomb_activate = false;
 Felix_bomb_explode = true;
+checklife = true;
 var t = setTimeout('ClearFelixB()',1000);
 
 }
 function ClearFelixB()
 {// clear explosion images
 Felix_bomb_explode = false;
+}
+
+// check the presence of Tom or Felix in explosion area
+function Checklife(y,x){
+var i,j;
+j = x; i = y;
+if(i == TomY && j == TomX) InitializeTom();
+if(i-1 == TomY && j == TomX) InitializeTom();
+if(i+1 == TomY && j == TomX) InitializeTom();
+if(i == TomY && j-1 == TomX) InitializeTom();
+if(i == TomY && j+1 == TomX) InitializeTom();
+
+if(i == FelixY && j == FelixX) InitializeFelix();
+if(i-1 == FelixY && j == FelixX) InitializeFelix();
+if(i+1 == FelixY && j == FelixX) InitializeFelix();
+if(i == FelixY && j-1 == FelixX) InitializeFelix();
+if(i == FelixY && j+1 == FelixX) InitializeFelix();
+}
+
+// Reset Tom's psition and decrease life
+function InitializeTom(){
+TomX = NCOLS - 1;
+TomY = NROWS - 1;
+DecreaseLifeTom();
+}
+
+// Reset Felix's psition and decrease life
+function InitializeFelix(){
+FelixX = 0;
+FelixY = 0;
+DecreaseLifeFelix();
+}
+
+function CatchMouseTom(x,y){
+
+}
+
+function CatchMouseFelix(x,y){
+
 }
 
 function IO(U, V) {//LA MOD String Version. A tiny ajax library.  by, DanDavis
