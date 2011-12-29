@@ -18,7 +18,7 @@ var BRICKWIDTH = 35;
 var PADDING = 0;
 var bricksCount = NROWS * NCOLS;
 
-var board = IO("Map.txt").split(/\r?\n/g);
+var board = IO("Map1.txt").split(/\r?\n/g);
 for(line in board)
 board[line]=board[line].split("");
 
@@ -91,6 +91,9 @@ var FelixBcount = 10;               // Felix's bombs
 var TomBcheck = 0;            
 var FelixBcheck = 0;
 
+var TomMoveEnabled=true;
+var FelixMoveEnabled=true;
+
 var checklife = false;
 //variables to hold intervalIds, would be used for clearing interval on Game Over
 var drawIntervalId=0;
@@ -103,8 +106,9 @@ function init() {
     ctx = $('#canvas')[0].getContext("2d");
     Draw();
     drawIntervalId=setInterval(Draw, 10);
-    mouseIntervalId=setInterval(DisplayMouse, 1000);
-    moveIntervalId=setInterval(makeMove,CAT_SPEED);  //check if cats should move.
+    DisplayMouse();
+    mouseIntervalId=setInterval(DisplayMouse, 5000);
+    moveIntervalId=setInterval(makeMove,CAT_SPEED);  //check if cats should move.    
 }
 
 // controlling Tom's movement
@@ -160,8 +164,8 @@ function setMovementflag(evtCode,value){
 	TomBcheck = 1;
 	if(TomBcount > 0)
 {Tom_bomb_activate = true;
-TomBcount -= 1; DecreaseBombTom();
-TomBombX = TomX; TomBombY = TomY;  TbombMove = TomBdir;
+TomBcount -= 1;DecreaseBombTom();
+TomBombX = TomX;TomBombY = TomY;TbombMove = TomBdir;
 TmoveCount = 0;
 //ThrowTomBomb();
 TomBIntervalId = setInterval(ThrowTomBomb, 40);
@@ -172,9 +176,9 @@ TomBIntervalId = setInterval(ThrowTomBomb, 40);
 	if(FelixBcheck == 0) {
 	FelixBcheck = 1;
 if(FelixBcount > 0)
-{ Felix_bomb_activate = true;
-FelixBcount -= 1; DecreaseBombFelix();
-FelixBombX = FelixX; FelixBombY = FelixY; FbombMove = FelixBdir;
+{Felix_bomb_activate = true;
+FelixBcount -= 1;DecreaseBombFelix();
+FelixBombX = FelixX;FelixBombY = FelixY;FbombMove = FelixBdir;
 FmoveCount = 0;
 FelixBIntervalId = setInterval(ThrowFelixBomb, 40);
 } else Felix_bomb_activate = false;
@@ -185,7 +189,7 @@ FelixBIntervalId = setInterval(ThrowFelixBomb, 40);
 function ThrowTomBomb() {
 if(TmoveCount < 4 ) {
  var x, y;
-x = TomBombX; y = TomBombY;
+x = TomBombX;y = TomBombY;
  TmoveCount = TmoveCount + 1;
  
  switch(TbombMove){ 
@@ -213,9 +217,9 @@ x = TomBombX; y = TomBombY;
 		else TomBombY = y + 1; 
 		TomBombX = x; 
 		break;
-default: break;
+default:break;
 } 
-}else { clearInterval(TomBIntervalId); 
+}else {clearInterval(TomBIntervalId); 
 var t = setTimeout('TomBombExp()',5000);}
 }
 
@@ -223,7 +227,7 @@ var t = setTimeout('TomBombExp()',5000);}
 function ThrowFelixBomb() {
 if(FmoveCount < 4) {
 var x, y;
-x = FelixBombX; y = FelixBombY;
+x = FelixBombX;y = FelixBombY;
  FmoveCount = FmoveCount + 1;
 
  switch(FbombMove){ 
@@ -248,8 +252,8 @@ case 87:   //Felix Up
 		else FelixBombY = y + 1; 
 		FelixBombX = x; 
 		break;
- default: break;
-} } else { clearInterval(FelixBIntervalId); 
+ default:break;
+}} else {clearInterval(FelixBIntervalId); 
 var t = setTimeout('FelixBombExp()',5000);}
 }
 //Key Borad Keys Event
@@ -267,95 +271,121 @@ $(document).keyup(onKeyUP);
 //Movement control
 function makeMove() {
     var x = -1, y = -1;
+    if(TomMoveEnabled){
+        makeTommove();
+    }
+    if(FelixMoveEnabled){
+        makeFelixmove();
+    }
 	
-	if (lifeTom > 0 && lifeFelix > 0) {
-		if(TOM_UP_PRESSED || TOM_LEFT_PRESSED || TOM_RIGHT_PRESSED || TOM_DOWN_PRESSED ) {
-			// Its Tom
-			x = TomX; y = TomY;
-			
-                        if(TOM_LEFT_PRESSED){
-                            x = x - 1;
+    checkGameover();
+}
 
-                            if (x >= 0) {
-                                    SetTomCoordinates(x, y);
-                            }
-                        } else if(TOM_RIGHT_PRESSED){
-                            x = x + 1;
-                          //  console.log("x = "+x);
-                            if (x < NCOLS) {
-                                    SetTomCoordinates(x, y);
-                            }
-                        } else if(TOM_UP_PRESSED){
-                            y = y - 1;
+//function responsible to update Tom movement pointeres
+function makeTommove(){
+    if(lifeTom > 0){
+        	if(TOM_UP_PRESSED || TOM_LEFT_PRESSED || TOM_RIGHT_PRESSED || TOM_DOWN_PRESSED ) {
+          // Its Tom
+          x = TomX;y = TomY;
 
-                            if (y >= 0) {
-                                    SetTomCoordinates(x, y);
-                            }
-                        } else if(TOM_DOWN_PRESSED){
-                            y = y + 1;
+                            if(TOM_LEFT_PRESSED){
+                                x = x - 1;
 
-                            if (y < NROWS) {
-                                    SetTomCoordinates(x, y);
-                            }
-                        }
-			
-			if (x > -1 && y > -1 && x < NCOLS && y < NROWS && board[y][x] == 'H') {
-				if(y == MouseY && x == MouseX) {
-					MouseX = -1;
-					MouseY = -1;
-					IncreaseScoreTom();
-				}
-				else {
-					InitializeTom();
-				}
-			}
-			
-		} 
-                //dont do 'elsif' here, both could move simultaneously, which is not possible in case of elseif.
-                if(  FELIX_LEFT_PRESSED || FELIX_UP_PRESSED || FELIX_RIGHT_PRESSED || FELIX_DOWN_PRESSED) {
-			// Its Felix
-			x = FelixX; y = FelixY;
-			
-                        if(FELIX_LEFT_PRESSED){
-                            x = x - 1;
+                                if (x >= 0) {
+                                        SetTomCoordinates(x, y);
+                                }
+                            } else if(TOM_RIGHT_PRESSED){
+                                x = x + 1;
+                              //  console.log("x = "+x);
+                                if (x < NCOLS) {
+                                        SetTomCoordinates(x, y);
+                                }
+                            } else if(TOM_UP_PRESSED){
+                                y = y - 1;
 
-                            if (x >= 0) {
-                                    SetFelixCoordinates(x, y);
-                            }
-                        } else if(FELIX_RIGHT_PRESSED){
-                            x = x + 1;
+                                if (y >= 0) {
+                                        SetTomCoordinates(x, y);
+                                }
+                            } else if(TOM_DOWN_PRESSED){
+                                y = y + 1;
 
-                            if (x < NCOLS) {
-                                    SetFelixCoordinates(x, y);
+                                if (y < NROWS) {
+                                        SetTomCoordinates(x, y);
+                                }
                             }
-                        } else if(FELIX_UP_PRESSED){
-                            y = y - 1;
 
-                            if (y >= 0) {
-                                    SetFelixCoordinates(x, y);
-                            }
-                        } else if(FELIX_DOWN_PRESSED){
-                            y = y + 1;
+          if (x > -1 && y > -1 && x < NCOLS && y < NROWS && board[y][x] == 'H') {
+            if(y == MouseY && x == MouseX) {
+              MouseX = -1;
+              MouseY = -1;
+              IncreaseScoreTom();
 
-                            if (y < NROWS) {
-                                    SetFelixCoordinates(x, y);
-                            }
-                        }
-			
-			if (x > -1 && y > -1 && x < NCOLS && y < NROWS && board[y][x] == 'H') {
-				if(y == MouseY && x == MouseX) {
-					MouseX = -1;
-					MouseY = -1;
-					IncreaseScoreFelix();
-				}
-				else {
-					InitializeFelix();
-				}
-			}
-		}
-	}
-	
-	if(lifeTom < 1 || lifeFelix < 1)
+              TomMoveEnabled=false;
+              setTimeout("TomMoveEnabled=true;", 500);
+            }
+            else {
+              InitializeTom();
+            }
+          }
+
+        }
+    }
+  
+}
+
+//function responsible to update Felix movement pointeres
+function makeFelixmove(){
+    if(lifeFelix>0){
+        if(  FELIX_LEFT_PRESSED || FELIX_UP_PRESSED || FELIX_RIGHT_PRESSED || FELIX_DOWN_PRESSED) {
+          // Its Felix
+          x = FelixX;y = FelixY;
+          
+                if(FELIX_LEFT_PRESSED){
+                    x = x - 1;
+
+                    if (x >= 0) {
+                            SetFelixCoordinates(x, y);
+                    }
+                } else if(FELIX_RIGHT_PRESSED){
+                    x = x + 1;
+
+                    if (x < NCOLS) {
+                            SetFelixCoordinates(x, y);
+                    }
+                } else if(FELIX_UP_PRESSED){
+                    y = y - 1;
+
+                    if (y >= 0) {
+                            SetFelixCoordinates(x, y);
+                    }
+                } else if(FELIX_DOWN_PRESSED){
+                    y = y + 1;
+
+                    if (y < NROWS) {
+                            SetFelixCoordinates(x, y);
+                    }
+                }
+
+          if (x > -1 && y > -1 && x < NCOLS && y < NROWS && board[y][x] == 'H') {
+            if(y == MouseY && x == MouseX) {
+              MouseX = -1;
+              MouseY = -1;
+              IncreaseScoreFelix();
+              FelixMoveEnabled=false;
+              setTimeout("FelixMoveEnabled=true;", 500);
+            }
+            else {
+              InitializeFelix();
+            }
+          }
+        }
+    }
+  
+}
+
+//Would call at a point where we need to check game over and display some alert
+function checkGameover(){
+  if(lifeTom < 1 || lifeFelix < 1)
 	{
 		if (scoreTom < scoreFelix) {
 			jAlert('Congratulations Felix You Won the Game', 'Game Over');
@@ -434,12 +464,12 @@ function Draw()
             } // Tom Bomb
 			if(Tom_bomb_activate && TomBombY == i && TomBombX == j) { //creating image of bomb
 			img = BombImg;
-			} if(Tom_bomb_explode){ //creating image for bomb explosion
-			if (checklife){ Checklife(TomBombY,TomBombX); checklife = false;}
+			}if(Tom_bomb_explode){ //creating image for bomb explosion
+			if (checklife){Checklife(TomBombY,TomBombX);checklife = false;}
 			RemoveFragile(TomBombY,TomBombX);
 			if(TomBombY-1 == i && TomBombX == j){
 			img = UexpImg;
-			} if(TomBombY+1 == i && TomBombX == j){
+			}if(TomBombY+1 == i && TomBombX == j){
 			img = DexpImg;
 			}if(TomBombY == i && TomBombX-1 == j){
 			img = LexpImg;
@@ -451,13 +481,13 @@ function Draw()
 			// Felix bomb 
 			if(Felix_bomb_activate && FelixBombY == i && FelixBombX == j) {
 			img = BombImg;
-			} if(Felix_bomb_explode){
-			if(checklife){ Checklife(FelixBombY,FelixBombX); checklfe = false; }
+			}if(Felix_bomb_explode){
+			if(checklife){Checklife(FelixBombY,FelixBombX);checklfe = false;}
 			RemoveFragile(FelixBombY,FelixBombX);
 			if(FelixBombY-1 == i && FelixBombX == j){
 			
 			img = UexpImg;
-			} if(FelixBombY+1 == i && FelixBombX == j){
+			}if(FelixBombY+1 == i && FelixBombX == j){
 			img = DexpImg;
 			}if(FelixBombY == i && FelixBombX-1 == j){
 			img = LexpImg;
@@ -476,8 +506,8 @@ function Draw()
 }
 
 function RemoveFragile(x,y)
-{ var i, j;
-i = x; j = y;
+{var i, j;
+i = x;j = y;
 if(board[i][j] == 'F') board[i][j] = 'E';
 if(i-1 > -1){if(board[i-1][j] == 'F') board[i-1][j] = 'E';}
 if(i+1 > NROWS){if(board[i+1][j] == 'F') board[i+1][j] = 'E';}
@@ -515,7 +545,7 @@ Felix_bomb_explode = false;
 // check the presence of Tom or Felix in explosion area
 function Checklife(y,x){
 var i,j;
-j = x; i = y;
+j = x;i = y;
 if(i == TomY && j == TomX) InitializeTom();
 if(i-1 == TomY && j == TomX) InitializeTom();
 if(i+1 == TomY && j == TomX) InitializeTom();
