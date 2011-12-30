@@ -17,10 +17,8 @@ var BRICKHEIGHT = 35;
 var BRICKWIDTH = 35;
 var PADDING = 0;
 var bricksCount = NROWS * NCOLS;
-
-var board = IO("Map.txt").split(/\r?\n/g);
-for(line in board)
-board[line]=board[line].split("");
+var map;
+var board;
 
 var SolidImg = new Image();
 SolidImg.src = 'Images/S.png';
@@ -98,13 +96,31 @@ var mouseIntervalId=0;
 var moveIntervalId=0;
 var TomBIntervalId = 0;
 var FelixBIntervalId = 0;
+
 // initializing system
 function init() {
+	map = getParameterByName("Map");
+	board = IO(map).split(/\r?\n/g);
+	for(line in board)
+		board[line]=board[line].split("");
+	
     ctx = $('#canvas')[0].getContext("2d");
     Draw();
     drawIntervalId=setInterval(Draw, 10);
     mouseIntervalId=setInterval(DisplayMouse, 1000);
     moveIntervalId=setInterval(makeMove,CAT_SPEED);  //check if cats should move.
+}
+// map updates
+function getParameterByName(name)
+{
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.href);
+  if(results == null)
+	return "";
+  else
+	return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
 // controlling Tom's movement
