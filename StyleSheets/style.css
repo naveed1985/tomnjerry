@@ -5,29 +5,30 @@
 	position:relative;
 	margin:0 auto;
 	border:solid #36F;
-    width:686px;
-	height:600px;
-	background-image:url(../Images/Background.jpeg);
+    width:702px;
+	height:549px;
+	background-image:url(../Images/main1.png);
 	direction:rtl;
 }
 
 #toolbar ul{
 	
-	float:right;
-	top:20px;
-	
-	margin:0px;
+	float:center;
+	top:100px;
+	margin:10px;
 	padding:10px;
 	list-style:none;
 	text-align:center;
 	}
 	#toolbar ul li{
 	
+	top: 100px;
 	padding:0 70px 0 70px;
 	display:marker;
 	}
 	#toolbar ul li a{
-
+	position:bottom center;
+    top: 100px;
 	text-decoration:none;
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:40px;

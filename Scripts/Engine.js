@@ -20,6 +20,7 @@ var bricksCount = NROWS * NCOLS;
 var map;
 var board;
 
+
 var SolidImg = new Image();
 SolidImg.src = 'Images/S.png';
 var EmptyImg = new Image();
@@ -97,13 +98,37 @@ var moveIntervalId=0;
 var TomBIntervalId = 0;
 var FelixBIntervalId = 0;
 
+//Toss Varibales
+var automode = 0;
+var framenum = 0;
+var framecnt = 0;
+var flipping = null;
+var choice = 0;
+var headcnt = 0;
+var tailcnt = 0;
+var pict = new Array(3, 4, 1, 4);
+var cachedimages = new Array(5);
+var historical = true;
+cachedimages[0] = new Image();
+cachedimages[0].src = "Images/heads.jpg";
+cachedimages[1] = new Image();
+cachedimages[1].src = "Images/tailsma1.jpg";
+cachedimages[2] = new Image();
+cachedimages[2].src = "Images/tailsma.jpg";
+cachedimages[3] = new Image();
+cachedimages[3].src = "Images/heads1.jpg";
+cachedimages[4] = new Image();
+cachedimages[4].src = "Images/dist.jpg";
+var tossWinner = 0;
+
 // initializing system
+
 function init() {
-	map = getParameterByName("Map");
+map = getParameterByName("Map");
 	board = IO(map).split(/\r?\n/g);
 	for(line in board)
 		board[line]=board[line].split("");
-	
+		
     ctx = $('#canvas')[0].getContext("2d");
     Draw();
     drawIntervalId=setInterval(Draw, 10);
@@ -122,7 +147,6 @@ function getParameterByName(name)
   else
 	return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
-
 // controlling Tom's movement
 function SetTomCoordinates(locx, locy) {
     if (board[locy][locx] == 'E') {
@@ -468,7 +492,7 @@ function Draw()
 			if(Felix_bomb_activate && FelixBombY == i && FelixBombX == j) {
 			img = BombImg;
 			} if(Felix_bomb_explode){
-			if(checklife){ Checklife(FelixBombY,FelixBombX); checklife = false; }
+			if(checklife){ Checklife(FelixBombY,FelixBombX); checklfe = false; }
 			RemoveFragile(FelixBombY,FelixBombX);
 			if(FelixBombY-1 == i && FelixBombX == j){
 			
@@ -491,14 +515,14 @@ function Draw()
     }
 }
 
-function RemoveFragile(y,x)
+function RemoveFragile(x,y)
 { var i, j;
-i = y; j = x;
+i = x; j = y;
 if(board[i][j] == 'F') board[i][j] = 'E';
 if(i-1 > -1){if(board[i-1][j] == 'F') board[i-1][j] = 'E';}
 if(i+1 > NROWS){if(board[i+1][j] == 'F') board[i+1][j] = 'E';}
-if(j-1 > -1){if(board[i][j-1] == 'F') board[i][j-1] = 'E';}
-if(j+1 > NCOLS){if(board[i][j+1] == 'F') board[i][j+1] = 'E';}
+if(j-1 > -1){if(board[i][j-1] == 'F') board[i+1][j-1] = 'E';}
+if(j+1 > NCOLS){if(board[i][j+1] == 'F') board[i+1][j+1] = 'E';}
 else return null;
 }
 
@@ -515,8 +539,7 @@ function ClearTomB()
 Tom_bomb_explode = false;
 }
 
-function FelixBombExp()
-{ // Activate explosion images
+function FelixBombExp(){ // Activate explosion images
 Felix_bomb_activate = false;
 Felix_bomb_explode = true;
 checklife = true;
@@ -576,24 +599,110 @@ function IO(U, V) {//LA MOD String Version. A tiny ajax library.  by, DanDavis
 }
 
 function DecreaseLifeTom() {
-    $('#LivesTom').text("Lives:" + --lifeTom);
+    $('#LivesTom').text("Lives : " + --lifeTom);
 }
 
 function DecreaseLifeFelix() {
-    $('#LivesFelix').text("Lives:" + --lifeFelix);
+    $('#LivesFelix').text("Lives : " + --lifeFelix);
 }
 
 function IncreaseScoreTom() {
-    $('#ScoreTom').text("Score:" + ++scoreTom);
+    $('#ScoreTom').text("Score : " + ++scoreTom);
 }
 
 function IncreaseScoreFelix() {
-    $('#ScoreFelix').text("Score:" + ++scoreFelix);
+    $('#ScoreFelix').text("Score : " + ++scoreFelix);
 }
 
 function DecreaseBombTom() {
-    $('#BombTom').text("Bombs:" + TomBcount);
+    $('#BombTom').text("Bombs : " + TomBcount);
 }
+
 function DecreaseBombFelix() {
-    $('#BombFelix').text("Bombs:" + FelixBcount);
+    $('#BombFelix').text("Bombs : " + FelixBcount);
 }
+
+//Starting Toss Functionality
+function posclicked(posnum) {
+	if (flipping == null) {
+		if (Math.random() < 0.5) {
+			choice = 0;
+			headcnt++;
+			var headcntTemp = document.getElementById("headcnt").value;
+			headcntTemp.value++;
+			tossWinner = "Tom";
+		}
+		else {
+			choice = 2;
+			tailcnt++;
+			var tailcntTemp = document.getElementById("tailcnt").value;
+			tailcntTemp.value++;
+			tossWinner = "Felix";
+		}
+		if (!automode) {
+			var headcntTemp = document.getElementById("headcnt").value;
+			var tailcntTemp = document.getElementById("tailcnt").value;
+			headcntTemp.value = 0;
+			tailcntTemp.value = 0;
+			framecnt = 0;
+			animate();
+		}
+	}
+}
+
+function animate() {
+	imageSrc = $("#coin").attr("src");
+	framenum = (framecnt) % 4;
+	window.document.coin.src = cachedimages[pict[framenum]].src;
+	framecnt++;
+	if ((framecnt > 8) && (framenum == choice)) {
+	window.document.coin.src = cachedimages[framenum].src;
+	flipping = null;
+	}
+	else
+		flipping = setTimeout("animate()", 50);
+}
+
+$(document).ready(function() {
+$('#coinParent').hide();
+$('#effect').hide();
+$('#toss').click(function(){ $('#coinParent').show();});
+
+	$('#coinParent').click(function() {
+		posclicked(0);
+		setTimeout( function() {
+		runEffect();
+	}, 1000 );
+		});	
+		//runEffect();
+});
+
+function runEffect() {
+			// get effect type from 
+			var selectedEffect = "slide";
+
+			// most effect types need no options passed by default
+			var options = {};
+			// some effects have required parameters
+			if ( selectedEffect === "scale" ) {
+				options = { percent: 100 };
+			} else if ( selectedEffect === "size" ) {
+				options = { to: { width: 280, height: 185 } };
+			}
+
+			// run the effect
+			var str = $("p:first").text();
+			$("#winner").html(tossWinner+" Wins");
+			$("#selection").html(tossWinner+" Please select your map");
+			$( "#effect" ).show( selectedEffect, options, 500, callback );
+		};
+
+function callback() {
+			setTimeout(function() {
+				//$( "#coinImageDiv:visible" ).removeAttr( "style" ).fadeOut();
+				$('#coinParent').hide();
+				$('#effect').hide();
+
+			}, 1000 );
+		};
+// Ending Toss Functionality
