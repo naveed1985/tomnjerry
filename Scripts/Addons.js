@@ -1,5 +1,5 @@
-var addons = ["drill", "jump", "pusher"];
-var addonDetail = ["Break Fragile Walls", "Jump Over Walls", "Push Fragile Walls"];
+var addons = ["drill", "jump", "pusher", "life"];
+var addonDetail = ["Break Fragile Walls", "Jump Over Walls", "Push Fragile Walls", "Life plus"];
 var addonsImgs = new Array(); // regular array (add an optional integer
 addonsImgs[0] = new Image();
 addonsImgs[0].src = 'Images/drill1.png';
@@ -7,6 +7,8 @@ addonsImgs[1] = new Image();
 addonsImgs[1].src = 'Images/jump1.png';
 addonsImgs[2] = new Image();
 addonsImgs[2].src = 'Images/pusher1.png';
+addonsImgs[3] = new Image();
+addonsImgs[3].src = 'Images/life.png';
 var AddonX = 0;
 var AddonY = 0;
 var oldAddonLoc = -1;
@@ -118,7 +120,9 @@ function HandleAddonTom(locx, locy) {
                 TomY = locy;
             }
         }
-    }
+    } else if (TomAddon == 3) { // Life
+		IncreaseLifeTom();
+	}
 }
 
 function HandleAddonFelix(locx, locy) {//, Addon, CurrectCatX, CurrectCatY, OtherCatX, OtherCatY) {
@@ -151,5 +155,7 @@ function HandleAddonFelix(locx, locy) {//, Addon, CurrectCatX, CurrectCatY, Othe
                 FelixY = locy;
             }
         }
-    }
+    } else if (FelixAddon == 3) { // Life
+		IncreaseLifeFelix();
+	}
 }

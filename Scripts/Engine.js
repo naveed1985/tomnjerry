@@ -786,8 +786,16 @@ function IO(U, V) {//LA MOD String Version. A tiny ajax library.  by, DanDavis
     return X.responseText;
 }
 
+function IncreaseLifeTom() {
+    $('#LivesTom').text(++lifeTom);
+}
+
 function DecreaseLifeTom() {
     $('#LivesTom').text(--lifeTom);
+}
+
+function IncreaseLifeFelix() {
+    $('#LivesFelix').text(++lifeFelix);
 }
 
 function DecreaseLifeFelix() {
