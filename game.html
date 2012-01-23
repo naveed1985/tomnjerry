@@ -1,0 +1,207 @@
+﻿<html>
+<head>
+    <bgsound src="#" id="soundeffect" loop="1" autostart="true" />
+    <script type="text/javascript">
+        var soundfile = "cartoon.mp3" //path to sound file, or pass in filename directly into playsound()
+
+        function playsound(soundfile) {
+            if (document.all && document.getElementById) {
+                document.getElementById("soundeffect").src = "" //reset first in case of problems
+                document.getElementById("soundeffect").src = soundfile
+            }
+        }
+
+        function bindsound(tag, soundfile, masterElement) {
+            if (!window.event) return
+            var source = event.srcElement
+            while (source != masterElement && source.tagName != "HTML") {
+                if (source.tagName == tag.toUpperCase()) {
+                    playsound(soundfile)
+                    break
+                }
+                source = source.parentElement
+            }
+        }
+
+</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="Scripts/jquery-1.7.js"></script>
+    <script src="Scripts/Engine.js"></script>
+    <script src="Scripts/Addons.js"></script>
+    <script src="Scripts/jqueryAlerts.js"></script>
+    <script src="Scripts/jquery-1.6.2.min.js"></script>
+    <script src="Scripts/jquery-ui-1.8.16.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="StyleSheets/style1.css" />
+    <link rel="stylesheet" type="text/css" href="StyleSheets/jqueryAlerts.css" />
+    <link rel="stylesheet" type="text/css" href="StyleSheets/jquery-ui-1.8.16.custom.css" />
+    <title>Tom & Jerry</title>
+    <style type="text/css">
+        #button
+        {
+            padding: .5em 1em;
+            text-decoration: none;
+        }
+        .style1
+        {
+            width: 100%;
+        }
+        .style2
+        {
+            width: 78px;
+        }
+        .style3
+        {
+            text-align: center;
+        }
+        .container
+        {
+            width: 770px;
+            margin: auto;
+        }
+        #content
+        {
+            border: 1px solid;
+            width: 770px;
+        }
+        .board
+        {
+            margin: 20px;
+            top: 40px;
+            width: 160px;
+            padding: 10px;
+            height: 28px;
+            border: 5px solid #660000;
+            outline: 4px solid black;
+            outline-offset: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#dialog-modal").hide();
+        });
+
+        function openModal() {
+            // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+            $("#dialog:ui-dialog").dialog("destroy");
+
+            $("#dialog-modal").dialog({
+                height: 160,
+                modal: true,
+                width: 50,
+                show: 'slide',
+                closeOnEscape: false
+            });
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div>
+        <div class="style3" style="width: 150px; position: relative; top: 0%; float: left;">
+            <div class="style3">
+                Felix</div>
+            <table class="style1" border="1">
+                <tr>
+                    <td class="style2">
+                        Lives
+                    </td>
+                    <td id="LivesFelix">
+                        3
+                    </td>
+                </tr>
+                <tr>
+                    <td class="style2">
+                        Score
+                    </td>
+                    <td id="ScoreFelix">
+                        0
+                    </td>
+                </tr>
+                <tr>
+                    <td class="style2">
+                        Bombs
+                    </td>
+                    <td id="BombFelix">
+                        10
+                    </td>
+                </tr>
+                <tr>
+                    <td class="style2" style="height: 150px; text-align: center;" colspan="2">
+                        <img id="FelixAddon" src="images/white.png" style="width: 100%;" />
+                        <div id="imgTDFelix">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="style3" style="width: 150px; position: relative; top: 0%; float: right;">
+            <div class="style3">
+                Tom</div>
+            <table class="style1" border="1">
+                <tr>
+                    <td class="style2">
+                        Lives
+                    </td>
+                    <td id="LivesTom">
+                        3
+                    </td>
+                </tr>
+                <tr>
+                    <td class="style2">
+                        Score
+                    </td>
+                    <td id="ScoreTom">
+                        0
+                    </td>
+                </tr>
+                <tr>
+                    <td class="style2">
+                        Bombs
+                    </td>
+                    <td id="BombTom">
+                        10
+                    </td>
+                </tr>
+                <tr>
+                    <td class="style2" style="height: 150px; text-align: center;" colspan="2">
+                        <img id="TomAddon" src="images/white.png" style="width: 100%;" />
+                        <div id="imgTDTom">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div style="z-index: 999999; top: -8px; text-align: center; position: relative; font-size: 12px;">
+        <a href="#" id="button" class="ui-state-default ui-corner-all" onclick="javascript:openModal();">
+            Show Menu</a>
+    </div>
+    <div id="dialog-modal" title="Menu">
+        <table class="style1">
+            <tr>
+                <td class="style2">
+                    <a href="main.html?Map=Map.txt" target="_self">Home</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="style2">
+                    <a href="help.html" target="_self">Help</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="style2">
+                    <a href="MAPS.html" target="_self">Maps</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="container">
+        <div style="width: 770px;">
+            <div id="content" style="width: 770px; height: 630px; position: absolute; top: 0px;
+                background-image: url(images/S.png);">
+                <canvas id="canvas" width="700" height="560" style="position: absolute; top: 35px;
+                    left: 35px"></canvas>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
