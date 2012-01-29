@@ -19,7 +19,9 @@ var BRICKHEIGHT = 35;
 var BRICKWIDTH = 35;
 var PADDING = 0;
 var bricksCount = NROWS * NCOLS;
+var MouseHoleCount = 0;
 var map;
+var mapValue = 0;
 var board;
 
 
@@ -157,6 +159,9 @@ var tossWinner = 0;
 
 function init() {
     map = getParameterByName("Map");
+    mapValue = parseInt(getParameterByName("value"));
+    scoreTom = getParameterByName("TomScore");
+    scoreFelix = getParameterByName("FelixScore");
     board = IO(map).split(/\r?\n/g);
     for (line in board)
         board[line] = board[line].split("");
@@ -606,15 +611,25 @@ function makeMove() {
             clearInterval(mouseIntervalId);
             clearInterval(moveIntervalId);
         }
+        if (mapValue < 5)
+            $('#nextLevel').show();
     }
 }
 
 // display  mouse
 function DisplayMouse() {
+
+    if (MouseHoleCount == 0) {
+        for (i = 0; i < NROWS; i++)
+            for (j = 0; j < NCOLS; j++)
+                if (board[i][j] == 'H')
+                    MouseHoleCount = MouseHoleCount + 1;
+    }
+
     var randomnumber = -1;
 
     do {
-        randomnumber = Math.floor(Math.random() * 6);
+        randomnumber = Math.floor(Math.random() * MouseHoleCount);
     } while (randomnumber == oldMouse);
 
     oldMouse = randomnumber;
@@ -849,88 +864,3 @@ function DecreaseBombTom() {
 function DecreaseBombFelix() {
     $('#BombFelix').text(FelixBcount);
 }
-
-//Starting Toss Functionality
-function posclicked(posnum) {
-    if (flipping == null) {
-        if (Math.random() < 0.5) {
-            choice = 0;
-            headcnt++;
-            var headcntTemp = document.getElementById("headcnt").value;
-            headcntTemp.value++;
-            tossWinner = "Tom";
-        }
-        else {
-            choice = 2;
-            tailcnt++;
-            var tailcntTemp = document.getElementById("tailcnt").value;
-            tailcntTemp.value++;
-            tossWinner = "Felix";
-        }
-        if (!automode) {
-            var headcntTemp = document.getElementById("headcnt").value;
-            var tailcntTemp = document.getElementById("tailcnt").value;
-            headcntTemp.value = 0;
-            tailcntTemp.value = 0;
-            framecnt = 0;
-            animate();
-        }
-    }
-}
-
-function animate() {
-    imageSrc = $("#coin").attr("src");
-    framenum = (framecnt) % 4;
-    window.document.coin.src = cachedimages[pict[framenum]].src;
-    framecnt++;
-    if ((framecnt > 8) && (framenum == choice)) {
-        window.document.coin.src = cachedimages[framenum].src;
-        flipping = null;
-    }
-    else
-        flipping = setTimeout("animate()", 50);
-}
-
-$(document).ready(function () {
-    $('#coinParent').hide();
-    $('#effect').hide();
-    $('#toss').click(function () { $('#coinParent').show(); });
-
-    $('#coinParent').click(function () {
-        posclicked(0);
-        setTimeout(function () {
-            runEffect();
-        }, 1000);
-    });
-    //runEffect();
-});
-
-function runEffect() {
-    // get effect type from 
-    var selectedEffect = "slide";
-
-    // most effect types need no options passed by default
-    var options = {};
-    // some effects have required parameters
-    if (selectedEffect === "scale") {
-        options = { percent: 100 };
-    } else if (selectedEffect === "size") {
-        options = { to: { width: 280, height: 185} };
-    }
-
-    // run the effect
-    var str = $("p:first").text();
-    $("#winner").html(tossWinner + " Wins");
-    $("#selection").html(tossWinner + " Please select your map");
-    $("#effect").show(selectedEffect, options, 500, callback);
-};
-
-function callback() {
-    setTimeout(function () {
-        //$( "#coinImageDiv:visible" ).removeAttr( "style" ).fadeOut();
-        $('#coinParent').hide();
-        $('#effect').hide();
-
-    }, 1000);
-};
-// Ending Toss Functionality
