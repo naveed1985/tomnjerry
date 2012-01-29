@@ -24,6 +24,9 @@ function SetTomAddon() {
     $("#imgTDTom").text(addonDetail[TomAddon]);
     clearInterval(tomAddonClearInterval);
     tomAddonClearInterval = setInterval(ClearTomAddon, 10000);
+    if (TomAddon == 3) { // Life
+        IncreaseLifeTom();
+    }
 }
 
 function SetFelixAddon() {
@@ -33,6 +36,9 @@ function SetFelixAddon() {
     $("#imgTDFelix").text(addonDetail[FelixAddon]);
     clearInterval(felixAddonClearInterval);
     felixAddonClearInterval = setInterval(ClearFelixAddon, 10000);
+    if (FelixAddon == 3) { // Life
+        IncreaseLifeFelix();
+    }
 }
 
 function ClearTomAddon() {
@@ -120,9 +126,7 @@ function HandleAddonTom(locx, locy) {
                 TomY = locy;
             }
         }
-    } else if (TomAddon == 3) { // Life
-		IncreaseLifeTom();
-	}
+    }
 }
 
 function HandleAddonFelix(locx, locy) {//, Addon, CurrectCatX, CurrectCatY, OtherCatX, OtherCatY) {
@@ -155,7 +159,5 @@ function HandleAddonFelix(locx, locy) {//, Addon, CurrectCatX, CurrectCatY, Othe
                 FelixY = locy;
             }
         }
-    } else if (FelixAddon == 3) { // Life
-		IncreaseLifeFelix();
-	}
+    }
 }
