@@ -78,6 +78,7 @@
     <script type="text/javascript">
         $(function () {
             $("#dialog-modal").hide();
+            $("#PauseDialog").hide();
         });
 
         function openModal() {
@@ -88,7 +89,6 @@
                 height: 160,
                 modal: true,
                 width: 50,
-                show: 'slide',
                 closeOnEscape: false
             });
         }
@@ -193,6 +193,9 @@
                 </td>
             </tr>
         </table>
+    </div>
+    <div id="PauseDialog" title="Game Paused">
+        <div>Hit 'P' to Resume</div>
     </div>
     <div class="container">
         <div style="width: 770px;">
