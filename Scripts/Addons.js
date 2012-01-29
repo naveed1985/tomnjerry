@@ -63,7 +63,9 @@ function DisplayAddon() {
 
     for (var i = 0; i < NROWS; i++) {
         for (var j = 0; j < NCOLS; j++) {
-            if (board[i][j] == 'E') {
+            if (board[i][j] == 'E' &&
+                i != FelixX && j != FelixY &&
+                i != TomX && j != TomY) {
                 rows[counter] = i;
                 cols[counter] = j;
                 counter++;
