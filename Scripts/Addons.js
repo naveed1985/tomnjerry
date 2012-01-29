@@ -101,62 +101,117 @@ function HandleAddonTom(locx, locy) {
         board[locy][locx] = 'E';
         TomX = locx;
         TomY = locy;
-    } else if (TomAddon == 1 || TomAddon == 2) { // jumper
+    } else if (TomAddon == 1 || TomAddon == 2) { // 1 = jumper  ---  2 = pusher
         var newLocX = locx;
         var newLocY = locy;
 
+        var factorX = 0;
+        var factorY = 0;
+
         if (locy - 1 == TomY) { // moved down
             newLocY = locy + 1;
+            factorY = 1;
         } else if (locy + 1 == TomY) { // moved up
             newLocY = locy - 1;
+            factorY = -1;
         } else if (locx - 1 == TomX) { // moved right
             newLocX = locx + 1;
+            factorX = 1;
         } else if (locx + 1 == TomX) { // moved left
             newLocX = locx - 1;
+            factorX = -1;
         }
 
-        if (board[newLocY][newLocX] == 'E' && (newLocX != FelixX || newLocY != FelixY)) {
-            if (TomAddon == 1) {
-                TomX = newLocX;
-                TomY = newLocY;
-            } else if (board[locy][locx] == 'F') {
+        if (newLocX != FelixX || newLocY != FelixY) {
+            if (board[newLocY][newLocX] == 'E' && board[locy][locx] == 'F' && TomAddon == 2) { // push - Checking for fragile, because if next block is fragile, we can move it, also checking that the block next to fragile is empty
                 board[newLocY][newLocX] = 'F';
                 board[locy][locx] = 'E';
                 TomX = locx;
                 TomY = locy;
             }
+
+            if (TomAddon == 1) { // jump
+                // Using simple if else structure to keep the code simple
+
+                if (board[newLocY][newLocX] == 'E') { // move to next empty block
+                    TomX = newLocX;
+                    TomY = newLocY;
+                } else if (board[newLocY + factorY][newLocX + factorX] == 'E') { // or the next
+                    TomX = newLocX + factorX;
+                    TomY = newLocY + factorY;
+                } else if (board[newLocY + factorY * 2][newLocX + factorX * 2] == 'E') { // or the next
+                    TomX = newLocX + factorX * 2;
+                    TomY = newLocY + factorY * 2;
+                } else if (board[newLocY + factorY * 3][newLocX + factorX * 3] == 'E') { // or the next
+                    TomX = newLocX + factorX * 3;
+                    TomY = newLocY + factorY * 3;
+                } else if (board[newLocY + factorY * 4][newLocX + factorX * 4] == 'E') { // or the next
+                    TomX = newLocX + factorX * 4;
+                    TomY = newLocY + factorY * 4;
+                }
+            }
         }
     }
 }
 
-function HandleAddonFelix(locx, locy) {//, Addon, CurrectCatX, CurrectCatY, OtherCatX, OtherCatY) {
+function HandleAddonFelix(locx, locy, rec) {//, Addon, CurrectCatX, CurrectCatY, OtherCatX, OtherCatY) {
     if (FelixAddon == 0 && board[locy][locx] == 'F') { // drill
         board[locy][locx] = 'E';
         FelixX = locx;
         FelixY = locy;
-    } else if (FelixAddon == 1 || FelixAddon == 2) { // jumper
+    } else if (FelixAddon == 1 || FelixAddon == 2) { // 1 = jumper  ---  2 = pusher
         var newLocX = locx;
         var newLocY = locy;
 
+        var factorX = 0;
+        var factorY = 0;
+
         if (locy - 1 == FelixY) { // moved down
             newLocY = locy + 1;
+            factorY = 1;
         } else if (locy + 1 == FelixY) { // moved up
             newLocY = locy - 1;
+            factorY = -1;
         } else if (locx - 1 == FelixX) { // moved right
             newLocX = locx + 1;
+            factorX = 1;
         } else if (locx + 1 == FelixX) { // moved left
             newLocX = locx - 1;
+            factorX = -1;
         }
 
-        if (board[newLocY][newLocX] == 'E' && (newLocX != TomX || newLocY != TomY)) {
-            if (FelixAddon == 1) {
-                FelixX = newLocX;
-                FelixY = newLocY;
-            } else if (board[locy][locx] == 'F') {
+        if (newLocX != TomX || newLocY != TomY) {
+            if (board[newLocY][newLocX] == 'E' && board[locy][locx] == 'F' && FelixAddon == 2) { // push - Checking for fragile, because if next block is fragile, we can move it, also checking that the block next to fragile is empty
                 board[newLocY][newLocX] = 'F';
                 board[locy][locx] = 'E';
                 FelixX = locx;
                 FelixY = locy;
+            }
+
+            if (FelixAddon == 1) { // jump
+                // Using simple if else structure to keep the code simple
+
+                if (board[newLocY][newLocX] == 'E') { // move to next empty block
+                    console.log(0);
+                    FelixX = newLocX;
+                    FelixY = newLocY;
+                } else if (board[newLocY + factorY][newLocX + factorX] == 'E') { // or the next
+                    console.log(1);
+                    FelixX = newLocX + factorX;
+                    FelixY = newLocY + factorY;
+                } else if (board[newLocY + factorY * 2][newLocX + factorX * 2] == 'E') { // or the next
+                    console.log(2);
+                    FelixX = newLocX + factorX * 2;
+                    FelixY = newLocY + factorY * 2;
+                } else if (board[newLocY + factorY * 3][newLocX + factorX * 3] == 'E') { // or the next
+                    console.log(3);
+                    FelixX = newLocX + factorX * 3;
+                    FelixY = newLocY + factorY * 3;
+                } else if (board[newLocY + factorY * 4][newLocX + factorX * 4] == 'E') { // or the next
+                    console.log(4);
+                    FelixX = newLocX + factorX * 4;
+                    FelixY = newLocY + factorY * 4;
+                }
             }
         }
     }
