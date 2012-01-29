@@ -192,23 +192,18 @@ function HandleAddonFelix(locx, locy, rec) {//, Addon, CurrectCatX, CurrectCatY,
                 // Using simple if else structure to keep the code simple
 
                 if (board[newLocY][newLocX] == 'E') { // move to next empty block
-                    console.log(0);
                     FelixX = newLocX;
                     FelixY = newLocY;
                 } else if (board[newLocY + factorY][newLocX + factorX] == 'E') { // or the next
-                    console.log(1);
                     FelixX = newLocX + factorX;
                     FelixY = newLocY + factorY;
                 } else if (board[newLocY + factorY * 2][newLocX + factorX * 2] == 'E') { // or the next
-                    console.log(2);
                     FelixX = newLocX + factorX * 2;
                     FelixY = newLocY + factorY * 2;
                 } else if (board[newLocY + factorY * 3][newLocX + factorX * 3] == 'E') { // or the next
-                    console.log(3);
                     FelixX = newLocX + factorX * 3;
                     FelixY = newLocY + factorY * 3;
                 } else if (board[newLocY + factorY * 4][newLocX + factorX * 4] == 'E') { // or the next
-                    console.log(4);
                     FelixX = newLocX + factorX * 4;
                     FelixY = newLocY + factorY * 4;
                 }
