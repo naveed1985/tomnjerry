@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="Scripts/jquery-1.7.js"></script>
+    <script src="Scripts/flowplayer.js"></script>
+    <link rel="stylesheet" type="text/css" href="StyleSheets/scrollable-buttons.css" />
+    <link rel="stylesheet" type="text/css" href="StyleSheets/scrollable-horizontal.css" />
+    <script type="text/javascript">
+        $(function () {
+            // initialize scrollable
+            $(".scrollable").scrollable();
+        });
+
+        function LoadMap() {
+            window.location = "game.html?Map=Map" + Math.abs(parseInt($("#scroller").css("left")) / 680) + ".txt";
+        }
+    </script>
+    <title>Select Map</title>
+    <style type="text/css">
+        .thumbsContainer
+        {
+            position: absolute;
+            left: 50%;
+            margin-left: -380px;
+            top: 70px;
+        }
+        /*
+	        root element for the scrollable.
+	        when scrolling occurs this element stays still.
+        */
+        .scrollable
+        {
+            /* required settings */
+            position: relative;
+            overflow: hidden;
+            width: 688px;
+            height: 526px;
+        }
+        
+        /*
+	        root element for scrollable items. Must be absolutely positioned
+	        and it should have a extremely large width to accommodate scrollable items.
+	        it's enough that you set width and height for the root element and
+	        not for this element.
+        */
+        .scrollable .items
+        {
+            /* this cannot be too large */
+            width: 20000em;
+            position: absolute;
+        }
+        
+        /*
+	        a single item. must be floated in horizontal scrolling.
+	        typically, this element is the one that *you* will style
+	        the most.
+        */
+        .items div
+        {
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div style="position: absolute; top: 60px; left: 50%; margin-left: -348px; z-index: 999;
+        cursor: pointer;" onclick="javascript:LoadMap();">
+        <img src="Images/SelectMapFrame.png" />
+    </div>
+    <div class="container" style="top: 0px;">
+        <h1 id="label" align="center">
+            Select Your Map To Play</h1>
+        <div class="thumbsContainer">
+            <!-- "previous page" action -->
+            <a class="prev browse left"></a>
+            <!-- root element for scrollable -->
+            <div class="scrollable">
+                <!-- root element for the items -->
+                <div id="scroller" class="items">
+                    <div>
+                        <img src="maps/0.png" />
+                    </div>
+                    <div>
+                        <img src="maps/1.png" />
+                    </div>
+                    <div>
+                        <img src="maps/2.png" />
+                    </div>
+                    <div>
+                        <img src="maps/3.png" />
+                    </div>
+                    <div>
+                        <img src="maps/4.png" />
+                    </div>
+                    <div>
+                        <img src="maps/5.png" />
+                    </div>
+					<div>
+                        <img src="maps/6.png" />
+                    </div>
+                </div>
+            </div>
+            <!-- "next page" action -->
+            <a class="next browse right"></a>
+        </div>
+        <a href="help.html" target="_self">
+            <img style="position: absolute; top: 120px; left: 10px; width: 160px; height: 51px"
+                src="Images/helpmenubtn.png">
+        </a><a href="powerups.html" target="_self">
+            <img style="position: absolute; top: 180px; left: 10px; width: 160px; height: 51px"
+                src="Images/powerbtn.png">
+        </a><a href="main.html" target="_self">
+            <img style="position: absolute; top: 240px; left: 10px; width: 160px; height: 51px"
+                src="Images/mainbtn.png">
+        </a>
+    </div>
+	<EMBED SRC="sounds/TomandJerry_Kids_theme.mp3" 
+	WIDTH="160" HEIGHT="16" align="middle" 
+	AUTOPLAY="true" HIDDEN="false"
+	PLUGINSPAGE="http://www.apple.com/quicktime/download/"> 
+</EMBED>
+</body>
+</html>

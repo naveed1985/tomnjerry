@@ -6,7 +6,6 @@
     <script src="Scripts/Engine.js"></script>
     <script src="Scripts/Addons.js"></script>
     <script src="Scripts/jqueryAlerts.js"></script>
-    <script src="Scripts/jquery-1.6.2.min.js"></script>
     <script src="Scripts/jquery-ui-1.8.16.custom.min.js"></script>
     <link rel="stylesheet" type="text/css" href="StyleSheets/style1.css" />
     <link rel="stylesheet" type="text/css" href="StyleSheets/jqueryAlerts.css" />
@@ -56,6 +55,13 @@
     <script type="text/javascript">
         $(function () {
             $("#dialog-modal").hide();
+            $("#PauseDialog").hide();
+
+
+            $('#nextLevel').click(function () {
+                mapValue = mapValue + 1;
+                window.location = 'game.html?Map=Map' + mapValue + '.txt&value=' + mapValue + '&TomScore=' + scoreTom + '&FelixScore=' + scoreFelix;
+            });
         });
 
         function openModal() {
@@ -66,7 +72,6 @@
                 height: 160,
                 modal: true,
                 width: 50,
-                show: 'slide',
                 closeOnEscape: false
             });
         }
@@ -167,15 +172,22 @@
             </tr>
             <tr>
                 <td class="style2">
+<<<<<<< HEAD
                     <a href="powerups.html" target="_self">PowerUps</a>
                 </td>
             </tr>
 			 <tr>
                 <td class="style2">
                     <a href="game.html" target="_self">New Game</a>
+=======
+                   <div id ="nextLevel" style="display:none; text-decoration:underline; cursor:pointer;">Next Level</div>
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
                 </td>
             </tr>
         </table>
+    </div>
+    <div id="PauseDialog" title="Game Paused">
+        <div>Hit 'P' to Resume</div>
     </div>
     <div class="container">
         <div style="width: 770px;">

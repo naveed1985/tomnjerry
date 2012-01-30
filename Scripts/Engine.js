@@ -6,6 +6,8 @@
 
 var ctx;
 
+var GamePaused = false;
+
 var lifeTom = 3;
 var lifeFelix = 3;
 var scoreTom = 0;
@@ -18,7 +20,9 @@ var BRICKHEIGHT = 35;
 var BRICKWIDTH = 35;
 var PADDING = 0;
 var bricksCount = NROWS * NCOLS;
+var MouseHoleCount = 0;
 var map;
+var mapValue = 0;
 var board;
 
 
@@ -156,6 +160,9 @@ var tossWinner = 0;
 
 function init() {
     map = getParameterByName("Map");
+    mapValue = parseInt(getParameterByName("value"));
+    scoreTom = getParameterByName("TomScore");
+    scoreFelix = getParameterByName("FelixScore");
     board = IO(map).split(/\r?\n/g);
     for (line in board)
         board[line] = board[line].split("");
@@ -229,9 +236,13 @@ function setMovementflag(evtCode, value) {
     } else if (evtCode == 83) { //Felix Down
         FELIX_DOWN_PRESSED = value;
         FelixBdir = evtCode;
+<<<<<<< HEAD
     }
     if (evtCode == 66) {   // Bomb Selection for Tom
 	playSound('sounds/selectBomb.mp3');
+=======
+    } else if (evtCode == 66) {   // Bomb Selection for Tom
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
         if (TomBcheck == 0) { //to avoid multiple selection of Bomb on single press 
             TomBcheck = 1;
             if (TomBcount > 0) {
@@ -246,8 +257,12 @@ function setMovementflag(evtCode, value) {
         }
 
 
+<<<<<<< HEAD
     } if (evtCode == 90) { // Bomb Selection for Felix
 	playSound('sounds/selectBomb.mp3');
+=======
+    } else if (evtCode == 90) { // Bomb Selection for Felix
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
         if (FelixBcheck == 0) {
             FelixBcheck = 1;
             if (FelixBcount > 0) {
@@ -260,8 +275,12 @@ function setMovementflag(evtCode, value) {
         }
 
 
+<<<<<<< HEAD
     } if (evtCode == 86) { // Arrow selection for Tom
 	playSound('sounds/arrowSelect.mp3');
+=======
+    } else if (evtCode == 86) { // Arrow selection form Tom
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
         if (TomAcheck == 0) { //to avoid multiple selection of Arrows on single press 
             TomAcheck = 1;
             if (TomAcount > 0) {
@@ -272,10 +291,14 @@ function setMovementflag(evtCode, value) {
                 TomAIntervalId = setInterval(ThrowTomArrow, 40);
             } else Tom_arrow_activate = false;
         }
+<<<<<<< HEAD
     }
 
     if (evtCode == 88) { // Arrow selection form Felix
 	playSound('sounds/arrowSelect.mp3');
+=======
+    } else if (evtCode == 88) { // Arrow selection form Felix
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
         if (FelixAcheck == 0) { //to avoid multiple selection of Arrows on single press 
             FelixAcheck = 1;
             if (FelixAcount > 0) {
@@ -327,8 +350,6 @@ function ThrowTomArrow() {
     } else { ClearTArrows(); }
 }
 
-
-
 function ThrowFelixArrow() {
     if (Felix_arrow_activate) {
         var x, y;
@@ -374,7 +395,6 @@ function ClearTArrows() {
 function ClearFArrows() {
     clearInterval(FelixAIntervalId); FelixAcheck = 0; Felix_arrow_activate = false;
 }
-
 
 function ThrowTomBomb() {
     if (TmoveCount < 4) {
@@ -450,6 +470,11 @@ function ThrowFelixBomb() {
         var t = setTimeout('FelixBombExp()', 5000);
     }
 }
+
+$(document).keydown(onKeyDown);
+$(document).keyup(onKeyUP);
+$(document).keypress(onKeyPRESS);
+
 //Key Borad Keys Event
 function onKeyDown(evt) {
     setMovementflag(evt.keyCode, true);
@@ -459,8 +484,37 @@ function onKeyUP(evt) {
     setMovementflag(evt.keyCode, false);
 }
 
-$(document).keydown(onKeyDown);
-$(document).keyup(onKeyUP);
+function onKeyPRESS(evt) {
+    if (evt.charCode == 112) { // Game Pause
+        if (GamePaused) {
+            ResumeGame();
+        }
+        else {
+            PauseGame();
+        }
+    }
+}
+
+function PauseGame() {
+    GamePaused = true;
+
+    // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+    $("#PauseDialog").dialog("destroy");
+
+    $("#PauseDialog").dialog({
+        height: 100,
+        modal: true,
+        width: 200,
+        show: 'slide',
+        closeOnEscape: false,
+        open: function (event, ui) { $(".ui-dialog-titlebar-close", $(this).parent()).hide(); }
+    });
+}
+
+function ResumeGame() {
+    GamePaused = false;
+    $("#PauseDialog").dialog("destroy");
+}
 
 //Movement control
 function makeMove() {
@@ -581,18 +635,31 @@ function makeMove() {
             clearInterval(mouseIntervalId);
             clearInterval(moveIntervalId);
         }
+<<<<<<< HEAD
 		if(mapValue < 6)
 			$('#nextLevelDiv').show();
 		//$('#mapsDiv').show();
+=======
+        if (mapValue < 5)
+            $('#nextLevel').show();
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
     }
 }
 
 // display  mouse
 function DisplayMouse() {
+
+    if (MouseHoleCount == 0) {
+        for (i = 0; i < NROWS; i++)
+            for (j = 0; j < NCOLS; j++)
+                if (board[i][j] == 'H')
+                    MouseHoleCount = MouseHoleCount + 1;
+    }
+
     var randomnumber = -1;
 
     do {
-        randomnumber = Math.floor(Math.random() * 6);
+        randomnumber = Math.floor(Math.random() * MouseHoleCount);
     } while (randomnumber == oldMouse);
 
     oldMouse = randomnumber;
@@ -616,78 +683,80 @@ function DisplayMouse() {
 // throw bomb
 
 function Draw() {
-    //FragileBricks();
-    brickCounter = 0;
-    var img;
-    for (i = 0; i < NROWS; i++) {
-        for (j = 0; j < NCOLS; j++) {
+    if (GamePaused == false) {
+        //FragileBricks();
+        brickCounter = 0;
+        var img;
+        for (i = 0; i < NROWS; i++) {
+            for (j = 0; j < NCOLS; j++) {
 
-            brickCounter++;
+                brickCounter++;
 
-            if (TomY == i && TomX == j && lifeTom > 0) {
-                img = TomImg;
-            } else if (FelixY == i && FelixX == j && lifeFelix > 0) {
-                img = FelixImg;
-            } else if (board[i][j] == 'F') {
-                img = FragileImg;
-            } else if (board[i][j] == 'S') {
-                img = SolidImg;
-            } else if (board[i][j] == 'E') {
-                img = EmptyImg;
-            } else if (board[i][j] == 'H') {
-                img = HoleImg;
-            }
-            if (MouseX == j && MouseY == i) {
-                img = MouseImg;
-            }
-            if (AddonX == j && AddonY == i && selectedAddon != -1) {
-                img = addonsImgs[selectedAddon];
-            }
-            // Tom Bomb
-            if (Tom_bomb_activate && TomBombY == i && TomBombX == j) { //creating image of bomb
-                img = BombImg;
-            }
-            if (Tom_bomb_explode) { //creating image for bomb explosion
-                if (checklife) { Checklife(TomBombY, TomBombX); checklife = false; }
-                RemoveFragile(TomBombY, TomBombX);
-                if (TomBombY - 1 == i && TomBombX == j) {
-                    img = UexpImg;
-                } if (TomBombY + 1 == i && TomBombX == j) {
-                    img = DexpImg;
-                } if (TomBombY == i && TomBombX - 1 == j) {
-                    img = LexpImg;
-                } if (TomBombY == i && TomBombX + 1 == j) {
-                    img = RexpImg;
+                if (TomY == i && TomX == j && lifeTom > 0) {
+                    img = TomImg;
+                } else if (FelixY == i && FelixX == j && lifeFelix > 0) {
+                    img = FelixImg;
+                } else if (board[i][j] == 'F') {
+                    img = FragileImg;
+                } else if (board[i][j] == 'S') {
+                    img = SolidImg;
+                } else if (board[i][j] == 'E') {
+                    img = EmptyImg;
+                } else if (board[i][j] == 'H') {
+                    img = HoleImg;
                 }
-                TomBcheck = 0;
-            }
-            // Felix bomb 
-            if (Felix_bomb_activate && FelixBombY == i && FelixBombX == j) {
-                img = BombImg;
-            }
-            if (Felix_bomb_explode) {
-                if (checklife) { Checklife(FelixBombY, FelixBombX); checklfe = false; }
-                RemoveFragile(FelixBombY, FelixBombX);
-                if (FelixBombY - 1 == i && FelixBombX == j) {
-                    img = UexpImg;
-                } if (FelixBombY + 1 == i && FelixBombX == j) {
-                    img = DexpImg;
-                } if (FelixBombY == i && FelixBombX - 1 == j) {
-                    img = LexpImg;
-                } if (FelixBombY == i && FelixBombX + 1 == j) {
-                    img = RexpImg;
+                if (MouseX == j && MouseY == i) {
+                    img = MouseImg;
                 }
-                FelixBcheck = 0;
-            }
+                if (AddonX == j && AddonY == i && selectedAddon != -1) {
+                    img = addonsImgs[selectedAddon];
+                }
+                // Tom Bomb
+                if (Tom_bomb_activate && TomBombY == i && TomBombX == j) { //creating image of bomb
+                    img = BombImg;
+                }
+                if (Tom_bomb_explode) { //creating image for bomb explosion
+                    if (checklife) { Checklife(TomBombY, TomBombX); checklife = false; }
+                    RemoveFragile(TomBombY, TomBombX);
+                    if (TomBombY - 1 == i && TomBombX == j) {
+                        img = UexpImg;
+                    } if (TomBombY + 1 == i && TomBombX == j) {
+                        img = DexpImg;
+                    } if (TomBombY == i && TomBombX - 1 == j) {
+                        img = LexpImg;
+                    } if (TomBombY == i && TomBombX + 1 == j) {
+                        img = RexpImg;
+                    }
+                    TomBcheck = 0;
+                }
+                // Felix bomb 
+                if (Felix_bomb_activate && FelixBombY == i && FelixBombX == j) {
+                    img = BombImg;
+                }
+                if (Felix_bomb_explode) {
+                    if (checklife) { Checklife(FelixBombY, FelixBombX); checklfe = false; }
+                    RemoveFragile(FelixBombY, FelixBombX);
+                    if (FelixBombY - 1 == i && FelixBombX == j) {
+                        img = UexpImg;
+                    } if (FelixBombY + 1 == i && FelixBombX == j) {
+                        img = DexpImg;
+                    } if (FelixBombY == i && FelixBombX - 1 == j) {
+                        img = LexpImg;
+                    } if (FelixBombY == i && FelixBombX + 1 == j) {
+                        img = RexpImg;
+                    }
+                    FelixBcheck = 0;
+                }
 
-            if (Tom_arrow_activate && TomArrowY == i && TomArrowX == j) { img = TArrowImg; TArrowPath(TomArrowY, TomArrowX); }
+                if (Tom_arrow_activate && TomArrowY == i && TomArrowX == j) { img = TArrowImg; TArrowPath(TomArrowY, TomArrowX); }
 
-            if (Felix_arrow_activate && FelixArrowY == i && FelixArrowX == j) { img = FArrowImg; FArrowPath(FelixArrowY, FelixArrowX); }
+                if (Felix_arrow_activate && FelixArrowY == i && FelixArrowX == j) { img = FArrowImg; FArrowPath(FelixArrowY, FelixArrowX); }
 
-            ctx.drawImage(img,
+                ctx.drawImage(img,
                 (j * (BRICKWIDTH + PADDING)) + PADDING,
                 (i * (BRICKHEIGHT + PADDING)) + PADDING,
                 BRICKWIDTH, BRICKHEIGHT);
+            }
         }
     }
 }
@@ -837,6 +906,7 @@ function DecreaseBombTom() {
 function DecreaseBombFelix() {
     $('#BombFelix').text(FelixBcount);
 }
+<<<<<<< HEAD
 
 //Starting Toss Functionality
 function posclicked(posnum) {
@@ -933,3 +1003,5 @@ function callback() {
 			}, 1000 );
 		};
 // Ending Toss Functionality
+=======
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
