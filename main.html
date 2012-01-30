@@ -1,33 +1,71 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+     <script src="Scripts/jquery-1.7.js"></script>
+     <script src="Scripts/Engine.js"></script>
+     <script src="Scripts/jqueryAlerts.js"></script>
+     <script src="Scripts/jquery-1.6.2.min.js"></script>
+     <script src="Scripts/jquery-ui-1.8.16.custom.min.js"></script>
     <link rel="stylesheet" type="text/css" href="StyleSheets/style.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Tom & Jerry</title>
+	<STYLE>
+    .image1 {
+    background-image: url(Images/soundoff.jpg);
+    background-repeat: no-repeat;
+}
+.image2 {
+    background-image: url(Images/soundon.jpg);
+    background-repeat: no-repeat;
+}
+</STYLE>
+<script type="text/javascript">
+		function remove(){
+			$("#embed").remove();
+		}
+		
+		function create(){
+			$("#div1").html("<EMBED id='embed' SRC='sounds/TomandJerry_Kids_theme.mp3' WIDTH='160' HEIGHT='16' align='left' LOOP='true' HIDDEN='false' AUTOPLAY='true'PLUGINSPAGE='http://www.apple.com/quicktime/download/' />");
+		
+		}
+		</script>
 </head>
 <body>
     <div id="toolbar">
+	<input type="button" class="image1" id="button1" style= "position: absolute; top: 510px; left: 320px; width:35px; height: 35px;"onclick="remove();"/>
+	<input type="button" class="image2" id="button2" style= "position: absolute; top: 510px; left:360px; width:35px; height: 35px;"onclick="create();"/>
+		<div id="div1">
+			<EMBED id="embed" SRC="sounds/TomandJerry_Kids_theme.mp3" WIDTH="160" HEIGHT="16" align="left" LOOP="true" HIDDEN="false" AUTOPLAY="true"PLUGINSPAGE="http://www.apple.com/quicktime/download/" />
+		</div>
 	<img STYLE="position:absolute; TOP:300px; LEFT:50px; WIDTH:160px; HEIGHT:170px"src="Images/61909.gif"></a>
-    <img STYLE="position:absolute; TOP:280px; RIGHT:50px; WIDTH:210px; HEIGHT:200px"src="Images/DANCING BLACK CAT.gif"></a>
+    <img STYLE="position:absolute; TOP:280px; RIGHT:70px; WIDTH:190px; HEIGHT:200px"src="Images/DANCING BLACK CAT.gif"></a>
         <ul>
             <li><a href="game.html?Map=Map0.txt" target="_self">
-                <img style="position: absolute; top: 290px; left: 250px; width: 208px; height: 43px"
+                <img style="position: absolute; top: 440px; left: 250px; width: 208px; height: 43px"
                     src="Images/playgame.png">
             </a></li>
             <li><a href="help.html" target="_self">
-                <img style="position: absolute; top: 340px; left: 250px; width: 208px; height: 43px"
+                <img style="position: absolute; top: 380px; left: 250px; width: 208px; height: 43px"
                     src="Images/helpmenu.png">
             </a></li>
-            <li><a href="MAPS.html" target="_self">
-                <img style="position: absolute; top: 390px; left: 250px; width: 208px; height: 43px"
-                    src="Images/selectmaps.png">
-            </a></li>
+			<div id="tossDiv"><li>
+				<a href="#Toss" id="toss" target="_self">
+					<img STYLE="position:absolute; TOP:320px; LEFT:250px; WIDTH:208px; HEIGHT:43px" 
+					src="Images/tosscoin.png">
+				</a>
+			</li></div>
         </ul>
     </div>
-	<EMBED SRC="sounds/TomandJerry_Kids_theme.mp3" 
-	WIDTH="160" HEIGHT="16" align="middle" 
-	AUTOPLAY="true" HIDDEN="false"
-	PLUGINSPAGE="http://www.apple.com/quicktime/download/"> 
-</EMBED>
+	<form name="dataform" method="post" target="dbframe">
+		<input type="hidden" id="headcnt" name="headcnt" value="0">
+		<input type="hidden" id="tailcnt" name="tailcnt" value="0">
+	</form>
+	<div style="background-color:transparent;position:absolute;top:120px;left:350px;height:150px;width:300px;z-index: 0;" id = "coinImageDiv" >
+		<a id ="coinParent" href="#1"><img width="150" height="150" title="Click here to flip the coin" name="coin" src="Images/heads.png"></a>
+		<div id="effect" style="display: block;left: 150px;height: 150px; width: 450px; background-color: #EE9A4D; position: absolute;top: 0;" >
+			<label id="winner" for = "Toss Coin" style="color:blue;text-align:center;font-size:100"></label>
+			<label id="selection" for = "Toss Coin" style="color:blue;text-align:center;font-size:20"></label>
+		</div>
+	</div>
 </body>
 </html>

@@ -18,6 +18,7 @@ var tomAddonClearInterval;
 var felixAddonClearInterval;
 
 function SetTomAddon() {
+playSound('sounds/valuepack.mp3');
     TomAddon = selectedAddon;
     selectedAddon = -1;
     $("#TomAddon").attr("src", "images/" + TomAddon + ".gif");
@@ -27,6 +28,7 @@ function SetTomAddon() {
 }
 
 function SetFelixAddon() {
+playSound('sounds/valuepack.mp3');
     FelixAddon = selectedAddon;
     selectedAddon = -1;
     $("#FelixAddon").attr("src", "images/" + FelixAddon + ".gif");

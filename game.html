@@ -1,29 +1,6 @@
 ﻿<html>
 <head>
-    <bgsound src="#" id="soundeffect" loop="1" autostart="true" />
-    <script type="text/javascript">
-        var soundfile = "cartoon.mp3" //path to sound file, or pass in filename directly into playsound()
-
-        function playsound(soundfile) {
-            if (document.all && document.getElementById) {
-                document.getElementById("soundeffect").src = "" //reset first in case of problems
-                document.getElementById("soundeffect").src = soundfile
-            }
-        }
-
-        function bindsound(tag, soundfile, masterElement) {
-            if (!window.event) return
-            var source = event.srcElement
-            while (source != masterElement && source.tagName != "HTML") {
-                if (source.tagName == tag.toUpperCase()) {
-                    playsound(soundfile)
-                    break
-                }
-                source = source.parentElement
-            }
-        }
-
-</script>
+ 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="Scripts/jquery-1.7.js"></script>
     <script src="Scripts/Engine.js"></script>
@@ -74,6 +51,7 @@
             outline: 4px solid black;
             outline-offset: 10px;
         }
+
     </style>
     <script type="text/javascript">
         $(function () {
@@ -184,12 +162,17 @@
             </tr>
             <tr>
                 <td class="style2">
-                    <a href="help.html" target="_self">Help</a>
+                    <a href="help.html" target="_self">Help Menu</a>
                 </td>
             </tr>
             <tr>
                 <td class="style2">
-                    <a href="MAPS.html" target="_self">Maps</a>
+                    <a href="powerups.html" target="_self">PowerUps</a>
+                </td>
+            </tr>
+			 <tr>
+                <td class="style2">
+                    <a href="game.html" target="_self">New Game</a>
                 </td>
             </tr>
         </table>
@@ -199,9 +182,16 @@
             <div id="content" style="width: 770px; height: 630px; position: absolute; top: 0px;
                 background-image: url(images/S.png);">
                 <canvas id="canvas" width="700" height="560" style="position: absolute; top: 35px;
-                    left: 35px"></canvas>
+                    left: 35px">
+					</canvas>
             </div>
         </div>
     </div>
+	<div id="parentSound">
+	</div>
+	
+	<EMBED SRC="sounds/jerry's theme.wav" WIDTH="160" HEIGHT="16" align="left" LOOP="true" HIDDEN="false" AUTOPLAY="true" PLUGINSPAGE="http://www.apple.com/quicktime/download/" />
+		
+
 </body>
 </html>
