@@ -169,7 +169,7 @@
                   success:function(data){
                     abc=data;
                       if(data["error"] != null){
-                        alert("Error "+data["error"]);
+                        alert(data["error"]);
                       }
                       else{
                         $("#dialog-modal").find("#logout td").show();
@@ -229,7 +229,7 @@
                   dataType: "json",
                   success:function(data){
                     abc=data;
-                      if(data["error"] != null || data["error"] != ""){
+                      if(data["error"] != null){
                         alert(data["error"]);
                       }
                       else{
