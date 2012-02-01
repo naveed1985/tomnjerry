@@ -998,8 +998,8 @@ function callback() {
 				$('#coinParent').hide();
 				$('#effect').hide();
 				$('#coinImageDiv').css( "z-index", "0" );
-				$('#toss').attr('href','MAPS.html');
-				 window.location = 'MAPS.html';
+				$('#toss').attr('href','maps.html');
+				 window.location = 'maps.html';
 			}, 1000 );
 		};
 // Ending Toss Functionality
