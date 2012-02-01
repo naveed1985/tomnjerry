@@ -168,10 +168,10 @@ function init() {
 
     ctx = $('#canvas')[0].getContext("2d");
     Draw();
-    drawIntervalId = setInterval(Draw, 10);
+    drawIntervalId  = setInterval(Draw, 10);
     mouseIntervalId = setInterval(DisplayMouse, 1000);
     addonIntervalId = setInterval(DisplayAddon, 3000);
-    moveIntervalId = setInterval(makeMove, CAT_SPEED);  //check if cats should move.
+    moveIntervalId  = setInterval(makeMove, CAT_SPEED);  //check if cats should move.
 }
 // map updates
 function getParameterByName(name) {

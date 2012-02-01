@@ -26,37 +26,37 @@ var board;
 
 
 var SolidImg = new Image();
-SolidImg.src = 'Images/S.png';
+SolidImg.src = '/Images/S.png';
 var EmptyImg = new Image();
-EmptyImg.src = 'Images/E.png';
+EmptyImg.src = '/Images/E.png';
 var FragileImg = new Image();
-FragileImg.src = 'Images/F.png';
+FragileImg.src = '/Images/F.png';
 var HoleImg = new Image();
-HoleImg.src = 'Images/H.png';
+HoleImg.src = '/Images/H.png';
 var MouseImg = new Image();
-MouseImg.src = 'Images/M.png';
+MouseImg.src = '/Images/M.png';
 var TomImg = new Image();
-TomImg.src = 'Images/Tom.jpg';
+TomImg.src = '/Images/Tom.jpg';
 var FelixImg = new Image();
-FelixImg.src = 'Images/Felix2.jpg';
+FelixImg.src = '/Images/Felix2.jpg';
 var BombImg = new Image();
-BombImg.src = 'Images/Bomb.jpg';
+BombImg.src = '/Images/Bomb.jpg';
 var UexpImg = new Image();
-UexpImg.src = 'Images/explosionUp.jpg';
+UexpImg.src = '/Images/explosionUp.jpg';
 var DexpImg = new Image();
-DexpImg.src = 'Images/explosionDown.jpg';
+DexpImg.src = '/Images/explosionDown.jpg';
 var RexpImg = new Image();
-RexpImg.src = 'Images/explosionRight.jpg';
+RexpImg.src = '/Images/explosionRight.jpg';
 var LexpImg = new Image();
-LexpImg.src = 'Images/explosionLeft.jpg';
+LexpImg.src = '/Images/explosionLeft.jpg';
 var RArrowImg = new Image();
-RArrowImg.src = 'Images/rightarrow.jpg';
+RArrowImg.src = '/Images/rightarrow.jpg';
 var LArrowImg = new Image();
-LArrowImg.src = 'Images/leftarrow.jpg';
+LArrowImg.src = '/Images/leftarrow.jpg';
 var UArrowImg = new Image();
-UArrowImg.src = 'Images/uparrow.jpg';
+UArrowImg.src = '/Images/uparrow.jpg';
 var DArrowImg = new Image();
-DArrowImg.src = 'Images/downarrow.jpg';
+DArrowImg.src = '/Images/downarrow.jpg';
 var TArrowImg; // = new Image();
 var FArrowImg;
 
@@ -144,34 +144,65 @@ var pict = new Array(3, 4, 1, 4);
 var cachedimages = new Array(5);
 var historical = true;
 cachedimages[0] = new Image();
-cachedimages[0].src = "Images/heads.jpg";
+cachedimages[0].src = "/Images/heads.jpg";
 cachedimages[1] = new Image();
-cachedimages[1].src = "Images/tailsma1.jpg";
+cachedimages[1].src = "/Images/tailsma1.jpg";
 cachedimages[2] = new Image();
-cachedimages[2].src = "Images/tailsma.jpg";
+cachedimages[2].src = "/Images/tailsma.jpg";
 cachedimages[3] = new Image();
-cachedimages[3].src = "Images/heads1.jpg";
+cachedimages[3].src = "/Images/heads1.jpg";
 cachedimages[4] = new Image();
-cachedimages[4].src = "Images/dist.jpg";
+cachedimages[4].src = "/Images/dist.jpg";
 var tossWinner = 0;
 
 // initializing system
 
 function init() {
+    
     map = getParameterByName("Map");
-    mapValue = parseInt(getParameterByName("value"));
-    scoreTom = getParameterByName("TomScore");
-    scoreFelix = getParameterByName("FelixScore");
-    board = IO(map).split(/\r?\n/g);
-    for (line in board)
-        board[line] = board[line].split("");
+    
+    var mValue = getParameterByName("value");
+    if(mValue != ""){
+        mapValue = parseInt(mValue);
+    }
+    var sTom = getParameterByName("TomScore");
+    if(sTom != ""){
+        scoreTom = sTom;
+    }
+   
+    var sFelix = getParameterByName("FelixScore");
+    if(sFelix != ""){
+        scoreFelix = sFelix;
+    }
+   
+    if(map != ""){
+        board = IO(map).split(/\r?\n/g);
+        for (line in board)
+            board[line] = board[line].split("");
+    }
+   
 
     ctx = $('#canvas')[0].getContext("2d");
+   
     Draw();
+   
     drawIntervalId = setInterval(Draw, 10);
+   
     mouseIntervalId = setInterval(DisplayMouse, 1000);
+   
     addonIntervalId = setInterval(DisplayAddon, 3000);
+   
     moveIntervalId = setInterval(makeMove, CAT_SPEED);  //check if cats should move.
+ 
+    $('#LivesTom').text(lifeTom);
+    $('#LivesTom').text(lifeTom);
+    $('#LivesFelix').text(lifeFelix);
+    $('#LivesFelix').text(lifeFelix);
+    $('#ScoreTom').text(scoreTom);
+    $('#ScoreFelix').text(scoreFelix);
+    $('#BombTom').text(TomBcount);
+    $('#BombFelix').text(FelixBcount);
+
 }
 // map updates
 function getParameterByName(name) {

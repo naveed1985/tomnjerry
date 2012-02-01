@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   validates :username, :presence => true, :format=>{:with => /^[-\w\._@]+$/i, :allow_blank => true, :message => "should only contain letters, numbers, or .-_@"}, :uniqueness=>true
   validates :password, :presence => true, :length => { :minimum => 6 }
 
-  before_create :encrypt_password
+  before_save :encrypt_password
 
   def self.authenticate(username, password)
     user = User.find_by_username(username)

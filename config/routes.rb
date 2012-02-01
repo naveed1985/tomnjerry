@@ -3,7 +3,10 @@ Tomnjerry::Application.routes.draw do
   # first created -> highest priority.
 
  resources :games
+ resources :users
+ resources :sessions
  match '/help'=>'help#index'
+ match '/game.html' => 'games#new'
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
