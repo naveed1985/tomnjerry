@@ -3,6 +3,7 @@
 * and open the template in the editor.
 */
 
+
 var ctx;
 
 var GamePaused = false;
@@ -144,11 +145,11 @@ var pict = new Array(3, 4, 1, 4);
 var cachedimages = new Array(5);
 var historical = true;
 cachedimages[0] = new Image();
-cachedimages[0].src = "Images/heads.jpg";
+cachedimages[0].src = "Images/heads.png";
 cachedimages[1] = new Image();
 cachedimages[1].src = "Images/tailsma1.jpg";
 cachedimages[2] = new Image();
-cachedimages[2].src = "Images/tailsma.jpg";
+cachedimages[2].src = "Images/tailsma.png";
 cachedimages[3] = new Image();
 cachedimages[3].src = "Images/heads1.jpg";
 cachedimages[4] = new Image();
@@ -235,7 +236,13 @@ function setMovementflag(evtCode, value) {
     } else if (evtCode == 83) { //Felix Down
         FELIX_DOWN_PRESSED = value;
         FelixBdir = evtCode;
+<<<<<<< HEAD
+    }
+    if (evtCode == 66) {   // Bomb Selection for Tom
+	playSound('sounds/selectBomb.mp3');
+=======
     } else if (evtCode == 66) {   // Bomb Selection for Tom
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
         if (TomBcheck == 0) { //to avoid multiple selection of Bomb on single press 
             TomBcheck = 1;
             if (TomBcount > 0) {
@@ -250,7 +257,12 @@ function setMovementflag(evtCode, value) {
         }
 
 
+<<<<<<< HEAD
+    } if (evtCode == 90) { // Bomb Selection for Felix
+	playSound('sounds/selectBomb.mp3');
+=======
     } else if (evtCode == 90) { // Bomb Selection for Felix
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
         if (FelixBcheck == 0) {
             FelixBcheck = 1;
             if (FelixBcount > 0) {
@@ -263,7 +275,12 @@ function setMovementflag(evtCode, value) {
         }
 
 
+<<<<<<< HEAD
+    } if (evtCode == 86) { // Arrow selection for Tom
+	playSound('sounds/arrowSelect.mp3');
+=======
     } else if (evtCode == 86) { // Arrow selection form Tom
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
         if (TomAcheck == 0) { //to avoid multiple selection of Arrows on single press 
             TomAcheck = 1;
             if (TomAcount > 0) {
@@ -274,7 +291,14 @@ function setMovementflag(evtCode, value) {
                 TomAIntervalId = setInterval(ThrowTomArrow, 40);
             } else Tom_arrow_activate = false;
         }
+<<<<<<< HEAD
+    }
+
+    if (evtCode == 88) { // Arrow selection form Felix
+	playSound('sounds/arrowSelect.mp3');
+=======
     } else if (evtCode == 88) { // Arrow selection form Felix
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
         if (FelixAcheck == 0) { //to avoid multiple selection of Arrows on single press 
             FelixAcheck = 1;
             if (FelixAcount > 0) {
@@ -611,8 +635,14 @@ function makeMove() {
             clearInterval(mouseIntervalId);
             clearInterval(moveIntervalId);
         }
+<<<<<<< HEAD
+		if(mapValue < 6)
+			$('#nextLevelDiv').show();
+		//$('#mapsDiv').show();
+=======
         if (mapValue < 5)
             $('#nextLevel').show();
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
     }
 }
 
@@ -766,9 +796,11 @@ function RemoveFragile(x, y) {
 
 // Functions to keep animations of 'Bomb' and 'explosion' under control
 function TomBombExp() { // Activate explosion images
+playSound('sounds/bombExplosion.wav');
     Tom_bomb_activate = false;
     Tom_bomb_explode = true;
     checklife = true;
+	
     var t = setTimeout('ClearTomB()', 1000);
 }
 function ClearTomB() { // clear explosion images
@@ -776,6 +808,7 @@ function ClearTomB() { // clear explosion images
 }
 
 function FelixBombExp() { // Activate explosion images
+playSound('sounds/bombExplosion.wav');
     Felix_bomb_activate = false;
     Felix_bomb_explode = true;
     checklife = true;
@@ -805,6 +838,7 @@ function Checklife(y, x) {
 
 // Reset Tom's psition and decrease life
 function InitializeTom() {
+
     TomX = NCOLS - 1;
     TomY = NROWS - 1;
     DecreaseLifeTom();
@@ -819,11 +853,19 @@ function InitializeFelix() {
 
 function CatchMouseTom(x, y) {
 
+
 }
 
 function CatchMouseFelix(x, y) {
 
 }
+//playSound for Event
+function playSound(sound) {
+	$('#sound').remove();
+	
+	$('#parentSound').html("<embed id='player' src='"+sound+"' autoPlay='true' volume='60' hidden='false'></embed>")
+}
+
 
 function IO(U, V) {//LA MOD String Version. A tiny ajax library.  by, DanDavis
     var X = !window.XMLHttpRequest ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest();
@@ -864,3 +906,102 @@ function DecreaseBombTom() {
 function DecreaseBombFelix() {
     $('#BombFelix').text(FelixBcount);
 }
+<<<<<<< HEAD
+
+//Starting Toss Functionality
+function posclicked(posnum) {
+	if (flipping == null) {
+		if (Math.random() < 0.5) {
+			choice = 0;
+			headcnt++;
+			var headcntTemp = document.getElementById("headcnt").value;
+			headcntTemp.value++;
+			tossWinner = "Tom";
+		}
+		else {
+			choice = 2;
+			tailcnt++;
+			var tailcntTemp = document.getElementById("tailcnt").value;
+			tailcntTemp.value++;
+			tossWinner = "Felix";
+		}
+		if (!automode) {
+			var headcntTemp = document.getElementById("headcnt").value;
+			var tailcntTemp = document.getElementById("tailcnt").value;
+			headcntTemp.value = 0;
+			tailcntTemp.value = 0;
+			framecnt = 0;
+			animate();
+		}
+	}
+}
+
+function animate() {
+	imageSrc = $("#coin").attr("src");
+	framenum = (framecnt) % 4;
+	window.document.coin.src = cachedimages[pict[framenum]].src;
+	framecnt++;
+	if ((framecnt > 8) && (framenum == choice)) {
+	window.document.coin.src = cachedimages[framenum].src;
+	flipping = null;
+	}
+	else
+		flipping = setTimeout("animate()", 50);
+}
+
+$(document).ready(function() {
+$('#coinParent').hide();
+$('#effect').hide();
+$('#toss').click(function(){ $('#coinParent').show();});
+	
+	$('#tossDiv').click(function() {
+	  $('#coinImageDiv').css( "z-index", "1" );
+	});
+	
+	$('#nextLevelDiv').click(function() {
+		mapValue++;
+	  $('#nextLevel').attr('href','game.html?Map=Map'+mapValue+'.txt&value=' +mapValue + '&TomScore=' + scoreTom + '&FelixScore =' + scoreFelix);
+	  window.location = 'game.html?Map=Map' + mapValue + '.txt&value=' + mapValue+'&TomScore=' + scoreTom + '&FelixScore =' + scoreFelix;
+	});
+	
+	$('#coinParent').click(function() {
+		posclicked(0);
+		setTimeout( function() {
+		runEffect();
+		}, 1000 );
+	});	
+});
+
+function runEffect() {
+			// get effect type from 
+			var selectedEffect = "slide";
+
+			// most effect types need no options passed by default
+			var options = {};
+			// some effects have required parameters
+			if ( selectedEffect === "scale" ) {
+				options = { percent: 100 };
+			} else if ( selectedEffect === "size" ) {
+				options = { to: { width: 280, height: 185 } };
+			}
+
+			// run the effect
+			var str = $("p:first").text();
+			$("#winner").html(tossWinner+" Wins");
+			$("#selection").html(tossWinner+" Please select your map");
+			$( "#effect" ).show( selectedEffect, options, 500, callback );
+		};
+
+function callback() {
+			setTimeout(function() {
+				//$( "#coinImageDiv:visible" ).removeAttr( "style" ).fadeOut();
+				$('#coinParent').hide();
+				$('#effect').hide();
+				$('#coinImageDiv').css( "z-index", "0" );
+				$('#toss').attr('href','MAPS.html');
+				 window.location = 'MAPS.html';
+			}, 1000 );
+		};
+// Ending Toss Functionality
+=======
+>>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
