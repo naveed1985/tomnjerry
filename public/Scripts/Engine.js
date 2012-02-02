@@ -24,6 +24,8 @@ var map;
 var mapValue = 0;
 var board;
 
+var TomMoveEnabled=true;
+var FelixMoveEnabled=true;
 
 var SolidImg = new Image();
 SolidImg.src = '/Images/S.png';
@@ -187,11 +189,12 @@ function init() {
     Draw();
    
     drawIntervalId = setInterval(Draw, 10);
-   
-    mouseIntervalId = setInterval(DisplayMouse, 1000);
-   
-    addonIntervalId = setInterval(DisplayAddon, 3000);
-   
+
+    //To display a mouse right after start
+    DisplayMouse();
+
+    mouseIntervalId=setInterval(DisplayMouse, 5000);
+    addonIntervalId = setInterval(DisplayAddon, 3000);    
     moveIntervalId = setInterval(makeMove, CAT_SPEED);  //check if cats should move.
  
     $('#LivesTom').text(lifeTom);
@@ -523,129 +526,164 @@ function ResumeGame() {
     $("#PauseDialog").dialog("destroy");
 }
 
+/*****/
+
 //Movement control
 function makeMove() {
     var x = -1, y = -1;
-
-    if (lifeTom > 0 && lifeFelix > 0) {
-        if (TOM_UP_PRESSED || TOM_LEFT_PRESSED || TOM_RIGHT_PRESSED || TOM_DOWN_PRESSED) {
-            // Its Tom
-            x = TomX; y = TomY;
-
-            if (TOM_LEFT_PRESSED) {
-                x = x - 1;
-
-                if (x >= 0) {
-                    SetTomCoordinates(x, y);
-                }
-            } else if (TOM_RIGHT_PRESSED) {
-                x = x + 1;
-                //  console.log("x = "+x);
-                if (x < NCOLS) {
-                    SetTomCoordinates(x, y);
-                }
-            } else if (TOM_UP_PRESSED) {
-                y = y - 1;
-
-                if (y >= 0) {
-                    SetTomCoordinates(x, y);
-                }
-            } else if (TOM_DOWN_PRESSED) {
-                y = y + 1;
-
-                if (y < NROWS) {
-                    SetTomCoordinates(x, y);
-                }
-            }
-
-            if (x > -1 && y > -1 && x < NCOLS && y < NROWS) {
-                if (board[y][x] == 'H') {
-                    if (y == MouseY && x == MouseX) {
-                        MouseX = -1;
-                        MouseY = -1;
-                        IncreaseScoreTom();
-                    }
-                    else {
-                        InitializeTom();
-                    }
-                }
-                if (y == AddonY && x == AddonX) {
-                    SetTomAddon();
-                }
-            }
-        }
-        //dont do 'elsif' here, both could move simultaneously, which is not possible in case of elseif.
-        if (FELIX_LEFT_PRESSED || FELIX_UP_PRESSED || FELIX_RIGHT_PRESSED || FELIX_DOWN_PRESSED) {
-            // Its Felix
-            x = FelixX; y = FelixY;
-
-            if (FELIX_LEFT_PRESSED) {
-                x = x - 1;
-
-                if (x >= 0) {
-                    SetFelixCoordinates(x, y);
-                }
-            } else if (FELIX_RIGHT_PRESSED) {
-                x = x + 1;
-
-                if (x < NCOLS) {
-                    SetFelixCoordinates(x, y);
-                }
-            } else if (FELIX_UP_PRESSED) {
-                y = y - 1;
-
-                if (y >= 0) {
-                    SetFelixCoordinates(x, y);
-                }
-            } else if (FELIX_DOWN_PRESSED) {
-                y = y + 1;
-
-                if (y < NROWS) {
-                    SetFelixCoordinates(x, y);
-                }
-            }
-
-            if (x > -1 && y > -1 && x < NCOLS && y < NROWS) {
-                if (board[y][x] == 'H') {
-                    if (y == MouseY && x == MouseX) {
-                        MouseX = -1;
-                        MouseY = -1;
-                        IncreaseScoreFelix();
-                    }
-                    else {
-                        InitializeFelix();
-                    }
-                }
-                if (y == AddonY && x == AddonX) {
-                    SetFelixAddon();
-                }
-            }
-        }
+    if(TomMoveEnabled){
+        makeTommove();
+    }
+    if(FelixMoveEnabled){
+        makeFelixmove();
     }
 
-    if (lifeTom < 1 || lifeFelix < 1) {
-        if (scoreTom < scoreFelix) {
-            jAlert('Congratulations Felix You Won the Game', 'Game Over');
-            clearInterval(drawIntervalId);
-            clearInterval(mouseIntervalId);
-            clearInterval(moveIntervalId);
-        }
-        else if (scoreTom > scoreFelix) {
-            jAlert('Congratulations Tom You Won the Game', 'Game Over');
-            clearInterval(drawIntervalId);
-            clearInterval(mouseIntervalId);
-            clearInterval(moveIntervalId);
-        }
-        else {
-            jAlert('Game Draw', 'Game Over');
-            clearInterval(drawIntervalId);
-            clearInterval(mouseIntervalId);
-            clearInterval(moveIntervalId);
-        }
-        if (mapValue < 5)
-            $('#nextLevel').show();
-    }
+    checkGameover();
 }
+
+//function responsible to update Tom movement pointeres
+function makeTommove(){
+    if(lifeTom > 0){
+        	if(TOM_UP_PRESSED || TOM_LEFT_PRESSED || TOM_RIGHT_PRESSED || TOM_DOWN_PRESSED ) {
+          // Its Tom
+          x = TomX;y = TomY;
+
+                            if(TOM_LEFT_PRESSED){
+                                x = x - 1;
+
+                                if (x >= 0) {
+                                        SetTomCoordinates(x, y);
+                                }
+                            } else if(TOM_RIGHT_PRESSED){
+                                x = x + 1;
+                              //  console.log("x = "+x);
+                                if (x < NCOLS) {
+                                        SetTomCoordinates(x, y);
+                                }
+                            } else if(TOM_UP_PRESSED){
+                                y = y - 1;
+
+                                if (y >= 0) {
+                                        SetTomCoordinates(x, y);
+                                }
+                            } else if(TOM_DOWN_PRESSED){
+                                y = y + 1;
+
+                                if (y < NROWS) {
+                                        SetTomCoordinates(x, y);
+                                }
+                            }
+
+          if (x > -1 && y > -1 && x < NCOLS && y < NROWS) {
+             if (board[y][x] == 'H') {
+                if(y == MouseY && x == MouseX) {
+                  MouseX = -1;
+                  MouseY = -1;
+                  IncreaseScoreTom();
+
+                  TomMoveEnabled=false;
+                  setTimeout("TomMoveEnabled=true;", 250);
+                }
+                else {
+                  InitializeTom();
+                }
+             }
+             if (y == AddonY && x == AddonX) {
+                SetTomAddon();
+             }
+          }
+
+        }
+    }
+
+}
+
+//function responsible to update Felix movement pointeres
+function makeFelixmove(){
+    if(lifeFelix>0){
+        if(  FELIX_LEFT_PRESSED || FELIX_UP_PRESSED || FELIX_RIGHT_PRESSED || FELIX_DOWN_PRESSED) {
+          // Its Felix
+          x = FelixX;y = FelixY;
+
+                if(FELIX_LEFT_PRESSED){
+                    x = x - 1;
+
+                    if (x >= 0) {
+                            SetFelixCoordinates(x, y);
+                    }
+                } else if(FELIX_RIGHT_PRESSED){
+                    x = x + 1;
+
+                    if (x < NCOLS) {
+                            SetFelixCoordinates(x, y);
+                    }
+                } else if(FELIX_UP_PRESSED){
+                    y = y - 1;
+
+                    if (y >= 0) {
+                            SetFelixCoordinates(x, y);
+                    }
+                } else if(FELIX_DOWN_PRESSED){
+                    y = y + 1;
+
+                    if (y < NROWS) {
+                            SetFelixCoordinates(x, y);
+                    }
+                }
+
+          if (x > -1 && y > -1 && x < NCOLS && y < NROWS) {
+            if (board[y][x] == 'H') {
+                if(y == MouseY && x == MouseX) {
+                  MouseX = -1;
+                  MouseY = -1;
+                  IncreaseScoreFelix();
+                  FelixMoveEnabled=false;
+                  setTimeout("FelixMoveEnabled=true;", 250);
+                }
+                else {
+                  InitializeFelix();
+                }
+            }
+            if (y == AddonY && x == AddonX) {
+                SetFelixAddon();
+            }
+            
+          }
+        }
+    }
+
+}
+
+//Would call at a point where we need to check game over and display some alert
+function checkGameover(){
+  if(lifeTom < 1 || lifeFelix < 1)
+	{
+		if (scoreTom < scoreFelix) {
+			jAlert('Congratulations Felix You Won the Game', 'Game Over');
+					clearAllIntervals();
+		}
+		else if(scoreTom > scoreFelix){
+			jAlert('Congratulations Tom You Won the Game', 'Game Over');
+					clearAllIntervals();
+		}
+		else {
+			jAlert('Game Draw', 'Game Over');
+					clearAllIntervals();
+		}
+    if (mapValue < 5)
+        $('#nextLevel').show();
+	}
+}
+
+function clearAllIntervals(){
+      clearInterval(drawIntervalId);
+      clearInterval(mouseIntervalId);
+      clearInterval(moveIntervalId);
+      clearInterval(addonIntervalId);
+}
+
+/****/
+
 
 // display  mouse
 function DisplayMouse() {

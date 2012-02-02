@@ -20,7 +20,7 @@ var felixAddonClearInterval;
 function SetTomAddon() {
     TomAddon = selectedAddon;
     selectedAddon = -1;
-    $("#TomAddon").attr("src", "images/" + TomAddon + ".gif");
+    $("#TomAddon").attr("src", "/Images/" + TomAddon + ".gif");
     $("#imgTDTom").text(addonDetail[TomAddon]);
     clearInterval(tomAddonClearInterval);
     tomAddonClearInterval = setInterval(ClearTomAddon, 10000);
@@ -32,7 +32,7 @@ function SetTomAddon() {
 function SetFelixAddon() {
     FelixAddon = selectedAddon;
     selectedAddon = -1;
-    $("#FelixAddon").attr("src", "images/" + FelixAddon + ".gif");
+    $("#FelixAddon").attr("src", "/Images/" + FelixAddon + ".gif");
     $("#imgTDFelix").text(addonDetail[FelixAddon]);
     clearInterval(felixAddonClearInterval);
     felixAddonClearInterval = setInterval(ClearFelixAddon, 10000);
@@ -43,14 +43,14 @@ function SetFelixAddon() {
 
 function ClearTomAddon() {
     TomAddon = -1;
-    $("#TomAddon").attr("src", "images/white.png");
+    $("#TomAddon").attr("src", "/Images/white.png");
     $("#imgTDTom").text("");
     clearInterval(tomAddonClearInterval);
 }
 
 function ClearFelixAddon() {
     FelixAddon = -1;
-    $("#FelixAddon").attr("src", "images/white.png");
+    $("#FelixAddon").attr("src", "/Images/white.png");
     $("#imgTDFelix").text("");
     clearInterval(felixAddonClearInterval);
 }
