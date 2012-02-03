@@ -1,7 +1,7 @@
 class UpdateGamesTable < ActiveRecord::Migration
   def self.up
     change_table :games do |t|
-      #t.string :name
+      t.string :name
       t.remove :tom_x
       t.remove :felix_x
       t.remove :tom_y
@@ -62,5 +62,64 @@ class UpdateGamesTable < ActiveRecord::Migration
   end
 
   def self.down
+    change_table :games do |t|
+      #t.remove :name
+      t.integer :tom_x
+      t.integer :felix_x
+      t.integer :tom_y
+      t.integer :felix_y
+      t.integer :fexlix_score
+      t.integer :tom_lives
+      t.integer :felix_lives
+      t.integer :tom_bombs
+      t.integer :felix_bombs
+      t.remove :lifeTom
+      t.remove :lifeFelix
+      t.remove :scoreTom
+      t.remove :scoreFelix
+      t.remove    :board
+      t.remove :FelixX
+      t.remove :FelixY
+      t.remove :TomX
+      t.remove :TomY
+      t.remove :MouseX
+      t.remove :MouseY
+      t.remove :TomBombX
+      t.remove :TomBombY
+      t.remove :TomArrowX
+      t.remove :TomArrowY
+      t.remove :FelixBombX
+      t.remove :FelixBombY
+      t.remove :FelixArrowX
+      t.remove :FelixArrowY
+      t.remove :TomAddon
+      t.remove :FelixAddon
+      t.remove :Tom_bomb_activate
+      t.remove :Felix_bomb_activate
+      t.remove :Tom_bomb_explode
+      t.remove :Felix_bomb_explode
+      t.remove :Tom_arrow_activate
+      t.remove :Felix_arrow_activate
+      t.remove :TomBdir
+      t.remove :FelixBdir
+      t.remove :TbombMove
+      t.remove :TarrowMove
+      t.remove :FbombMove
+      t.remove :FarrowMove
+      t.remove :TmoveCount
+      t.remove :TAMCount
+      t.remove :FmoveCount
+      t.remove :FAMCount
+      t.remove :TomBcount
+      t.remove :TomAcount
+      t.remove :FelixBcount
+      t.remove :FelixAcount
+      t.remove :TomBcheck
+      t.remove :TomAcheck
+      t.remove :FelixBcheck
+      t.remove :FelixAcheck
+      t.remove :checklife
+      t.remove :tossWinner
+    end
   end
 end
