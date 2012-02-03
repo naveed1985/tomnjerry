@@ -63,7 +63,7 @@ class UpdateGamesTable < ActiveRecord::Migration
 
   def self.down
     change_table :games do |t|
-      #t.remove :name
+      t.remove :name
       t.integer :tom_x
       t.integer :felix_x
       t.integer :tom_y
