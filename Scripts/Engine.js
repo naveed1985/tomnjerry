@@ -43,13 +43,13 @@ FelixImg.src = 'Images/Felix2.jpg';
 var BombImg = new Image();
 BombImg.src = 'Images/Bomb.jpg';
 var UexpImg = new Image();
-UexpImg.src = 'Images/explosionUp.jpg';
+UexpImg.src = 'Images/explosionUp.JPG';
 var DexpImg = new Image();
-DexpImg.src = 'Images/explosionDown.jpg';
+DexpImg.src = 'Images/explosionDown.JPG';
 var RexpImg = new Image();
-RexpImg.src = 'Images/explosionRight.jpg';
+RexpImg.src = 'Images/explosionRight.JPG';
 var LexpImg = new Image();
-LexpImg.src = 'Images/explosionLeft.jpg';
+LexpImg.src = 'Images/explosionLeft.JPG';
 var RArrowImg = new Image();
 RArrowImg.src = 'Images/rightarrow.jpg';
 var LArrowImg = new Image();
@@ -236,13 +236,9 @@ function setMovementflag(evtCode, value) {
     } else if (evtCode == 83) { //Felix Down
         FELIX_DOWN_PRESSED = value;
         FelixBdir = evtCode;
-<<<<<<< HEAD
-    }
-    if (evtCode == 66) {   // Bomb Selection for Tom
-	playSound('sounds/selectBomb.mp3');
-=======
+
     } else if (evtCode == 66) {   // Bomb Selection for Tom
->>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
+        playSound('sounds/selectBomb.mp3');
         if (TomBcheck == 0) { //to avoid multiple selection of Bomb on single press 
             TomBcheck = 1;
             if (TomBcount > 0) {
@@ -256,13 +252,8 @@ function setMovementflag(evtCode, value) {
             //ThrowTomBomb();
         }
 
-
-<<<<<<< HEAD
-    } if (evtCode == 90) { // Bomb Selection for Felix
-	playSound('sounds/selectBomb.mp3');
-=======
     } else if (evtCode == 90) { // Bomb Selection for Felix
->>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
+	playSound('sounds/selectBomb.mp3');
         if (FelixBcheck == 0) {
             FelixBcheck = 1;
             if (FelixBcount > 0) {
@@ -275,12 +266,8 @@ function setMovementflag(evtCode, value) {
         }
 
 
-<<<<<<< HEAD
-    } if (evtCode == 86) { // Arrow selection for Tom
-	playSound('sounds/arrowSelect.mp3');
-=======
     } else if (evtCode == 86) { // Arrow selection form Tom
->>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
+	playSound('sounds/arrowSelect.mp3');
         if (TomAcheck == 0) { //to avoid multiple selection of Arrows on single press 
             TomAcheck = 1;
             if (TomAcount > 0) {
@@ -291,14 +278,9 @@ function setMovementflag(evtCode, value) {
                 TomAIntervalId = setInterval(ThrowTomArrow, 40);
             } else Tom_arrow_activate = false;
         }
-<<<<<<< HEAD
-    }
-
-    if (evtCode == 88) { // Arrow selection form Felix
-	playSound('sounds/arrowSelect.mp3');
-=======
     } else if (evtCode == 88) { // Arrow selection form Felix
->>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
+        	playSound('sounds/arrowSelect.mp3');
+
         if (FelixAcheck == 0) { //to avoid multiple selection of Arrows on single press 
             FelixAcheck = 1;
             if (FelixAcount > 0) {
@@ -635,14 +617,9 @@ function makeMove() {
             clearInterval(mouseIntervalId);
             clearInterval(moveIntervalId);
         }
-<<<<<<< HEAD
+
 		if(mapValue < 6)
 			$('#nextLevelDiv').show();
-		//$('#mapsDiv').show();
-=======
-        if (mapValue < 5)
-            $('#nextLevel').show();
->>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
     }
 }
 
@@ -906,8 +883,6 @@ function DecreaseBombTom() {
 function DecreaseBombFelix() {
     $('#BombFelix').text(FelixBcount);
 }
-<<<<<<< HEAD
-
 //Starting Toss Functionality
 function posclicked(posnum) {
 	if (flipping == null) {
@@ -1003,5 +978,3 @@ function callback() {
 			}, 1000 );
 		};
 // Ending Toss Functionality
-=======
->>>>>>> 3efa08e1e62ce3652a34c8fc12eed38dac1471b2
