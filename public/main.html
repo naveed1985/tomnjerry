@@ -8,7 +8,35 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Tom & Jerry</title>
 </head>
+    	<STYLE>
+    .image1 {
+    background-image: url(/Images/soundoff.jpg);
+    background-repeat: no-repeat;
+    z-index: 2;
+}
+.image2 {
+    background-image: url(/Images/soundon.jpg);
+    background-repeat: no-repeat;
+    z-index: 2;
+}
+#embed{
+    visibility: hidden;
+}
+</STYLE>
+<script type="text/javascript">
+		function remove(){
+			$("#embed").remove();
+		}
+
+		function create(){
+			$("#div1").html("<EMBED id='embed' SRC='sounds/TomandJerry_Kids_theme.mp3' WIDTH='160' HEIGHT='16' align='left' LOOP='true' HIDDEN='false' AUTOPLAY='true'PLUGINSPAGE='http://www.apple.com/quicktime/download/' />");
+
+		}
+		</script>
 <body>
+    <input type="button" class="image1" id="button1" style= "position: absolute; top: 455px; left: 580px; width:35px; height: 35px;"onclick="remove();"/>
+	<input type="button" class="image2" id="button2" style= "position: absolute; top: 455px; left: 625px; width:35px; height: 35px;"onclick="create();"/>
+
     <form name="dataform" method="post" target="dbframe">
     <input type="hidden" id="headcnt" name="headcnt" value="0" />
     <input type="hidden" id="tailcnt" name="tailcnt" value="0" />
@@ -44,8 +72,10 @@
             </a></li>
         </ul>
     </div>
-    <embed src="sounds/TomandJerry_Kids_theme.mp3" width="160" height="16" align="middle"
+  <div id="div1">
+    <embed id="embed" src="sounds/TomandJerry_Kids_theme.mp3" width="160" height="16" align="middle"
         autoplay="true" hidden="false" pluginspage="http://www.apple.com/quicktime/download/"> 
-</embed>
+        </embed>
+  </div>
 </body>
 </html>
