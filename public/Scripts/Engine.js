@@ -874,6 +874,8 @@ function Checklife(y, x) {
 
 // Reset Tom's psition and decrease life
 function InitializeTom() {
+    clearInterval(tomAddonClearInterval);
+    ClearTomAddon();
     TomX = NCOLS - 1;
     TomY = NROWS - 1;
     DecreaseLifeTom();
@@ -881,6 +883,8 @@ function InitializeTom() {
 
 // Reset Felix's psition and decrease life
 function InitializeFelix() {
+    clearInterval(felixAddonClearInterval);
+    ClearFelixAddon();
     FelixX = 0;
     FelixY = 0;
     DecreaseLifeFelix();
