@@ -329,28 +329,28 @@ function ThrowTomArrow() {
         switch (TarrowMove) {
 
             case 37:   // Tom Left
-                if (x - 1 < 0) TomArrowX = 0;
+        	if(x-1 < 0) ClearTArrows();
                 else TomArrowX = x - 1;
                 TomArrowY = y;
                 TArrowImg = LArrowImg;
                 break;
 
             case 38:   //Tom Up
-                if (y - 1 < 0) TomArrowY = 0;
+		if(y-1 < 0) ClearTArrows();
                 else TomArrowY = y - 1;
                 TomArrowX = x;
                 TArrowImg = UArrowImg;
                 break;
 
             case 39:   //Tom Right
-                if (x + 1 > NCOLS) TomArrowX = NCOLS - 1;
+		if(x+1 > NCOLS ) ClearTArrows();
                 else TomArrowX = x + 1;
                 TomArrowY = y;
                 TArrowImg = RArrowImg;
                 break;
 
             case 40:    //Tom Down
-                if (y + 1 > NROWS) TomArrowY = NROWS - 1;
+		if (y+1 > NROWS) ClearTArrows();
                 else TomArrowY = y + 1;
                 TomArrowX = x;
                 TArrowImg = DArrowImg;
@@ -367,28 +367,28 @@ function ThrowFelixArrow() {
         switch (FarrowMove) {
 
             case 65:   // Felix Left
-                if (x - 1 < 0) FelixrrowX = 0;
+        	if(x-1 < 0) ClearFArrows();
                 else FelixArrowX = x - 1;
                 FelixArrowY = y;
                 FArrowImg = LArrowImg;
                 break;
 
             case 87:   //Felix Up
-                if (y - 1 < 0) FelixArrowY = 0;
+		if(y-1 < 0) ClearFArrows();
                 else FelixArrowY = y - 1;
                 FelixArrowX = x;
                 FArrowImg = UArrowImg;
                 break;
 
             case 68:   //Felix Right
-                if (x + 1 > NCOLS) FelixArrowX = NCOLS - 1;
+		if(x+1 > NCOLS ) ClearFArrows();
                 else FelixArrowX = x + 1;
                 FelixArrowY = y;
                 FArrowImg = RArrowImg;
                 break;
 
             case 83:    //Felix Down
-                if (y + 1 > NROWS) FelixArrowY = NROWS - 1;
+		if (y+1 > NROWS) ClearFArrows();
                 else FelixArrowY = y + 1;
                 FelixArrowX = x;
                 FArrowImg = DArrowImg;
